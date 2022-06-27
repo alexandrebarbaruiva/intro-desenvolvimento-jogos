@@ -24,23 +24,26 @@ class Game
 private:
     /* data */
     static Game *instance;
-    int initialPositionX = 0;
-    int initialPositionY = 0;
 
-    int SDLFlags = 0;
+    int SDL_Window_Flags = 0;
     int SDL_Image_Flags = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF;
+    int SDL_Mix_Flags = MIX_INIT_FLAC | MIX_INIT_MP3 | MIX_INIT_OGG;
 
     SDL_Window *window;
+    SDL_Renderer *renderer;
+    // State *state;
 
 protected:
     Game(std::string title, int width, int height);
-    ~Game();
-    std::string title_;
 
 public:
     // Singleton must not be cloneable nor assignable
     Game(Game &other) = delete;
     void operator=(const Game &) = delete;
+    ~Game();
+
+    // Game loop
+    void Run();
 
     // Method for controlling access to the single instance.
     // First run it creates the instance, after that it
@@ -48,13 +51,12 @@ public:
     static Game *GetInstance();
 
     // Method for getting game Renderer
-    void GetRenderer()
-    {
-        // ...
-    }
+    SDL_Renderer *GetRenderer();
 
-    std::string title() const
-    {
-        return title_;
-    }
+    // Method for getting current game State
+    // State GetState();
 };
+
+// Links:
+// https://www.geeksforgeeks.org/pointers-vs-references-cpp/
+// https://stackoverflow.com/questions/1008019/c-singleton-design-pattern
