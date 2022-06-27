@@ -12,7 +12,7 @@
 
 State::State() {
     quitRequested = false;
-    // bg = new Sprite()
+    // bg = new Sprite("../assets/img/ocean.jpg");
 }
 
 void State::LoadAssets(){
@@ -29,7 +29,7 @@ void State::Update(float dt){
 }
 
 void State::Render(){
-    // bg = Render();
+    // bg->Render(0, 0);
 }
 
 bool State::QuitRequested(){

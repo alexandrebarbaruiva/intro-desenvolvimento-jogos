@@ -19,7 +19,7 @@ Sprite::Sprite()
 
 Sprite::Sprite(std::string file)
 {
-    texture = nullptr;
+    Sprite();
     Open(file);
 }
 
