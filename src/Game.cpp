@@ -78,12 +78,6 @@ Game::Game(std::string title, int width, int height)
     }
 
     state = new State();
-
-    // Move following lines to destructor ASAP
-    SDL_Delay(2000);
-    SDL_Log("Constructor finished");
-    // SDL_DestroyWindow(window);
-    // SDL_Quit();
 }
 
 Game::~Game()
@@ -99,7 +93,8 @@ Game::~Game()
     SDL_Quit();
 }
 
-State Game::GetState(){
+State Game::GetState()
+{
     return *state;
 }
 
@@ -108,7 +103,8 @@ SDL_Renderer *Game::GetRenderer()
     return renderer;
 }
 
-std::string Game::getTitle(){
+std::string Game::getTitle()
+{
     return windowTitle;
 }
 
@@ -133,5 +129,4 @@ void Game::Run()
         SDL_RenderPresent(renderer);
         SDL_Delay(33);
     }
-    
 }
