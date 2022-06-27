@@ -12,7 +12,7 @@
 #define INCLUDE_SDL_IMAGE
 #define INCLUDE_SDL_MIXER
 #include "SDL_include.h"
-#include "../include/State.h"
+#include "State.h"
 
 // Game class using the Singleton's design pattern, which allows
 // only one instance to exist at any given moment. For that to be

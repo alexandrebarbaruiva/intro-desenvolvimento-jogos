@@ -77,10 +77,10 @@ Game::Game(std::string title, int width, int height)
         throw "Unable to create Renderer";
     }
 
-    // state = new State()
+    state = new State();
 
     // Move following lines to destructor ASAP
-    SDL_Delay(5000);
+    SDL_Delay(2000);
     SDL_Log("Constructor finished");
     // SDL_DestroyWindow(window);
     // SDL_Quit();
@@ -99,9 +99,9 @@ Game::~Game()
     SDL_Quit();
 }
 
-// State GetState(){
-//     return state;
-// }
+State Game::GetState(){
+    return *state;
+}
 
 SDL_Renderer *Game::GetRenderer()
 {
