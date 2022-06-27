@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2022
  *
  */
-#include <iostream>
+#include <string>
 #include "../include/Game.h"
 
 Game::Game(std::string title, int width, int height)

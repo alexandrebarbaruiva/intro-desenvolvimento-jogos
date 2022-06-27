@@ -1,7 +1,7 @@
 /**
- * @file Game.cpp
+ * @file State.cpp
  * @author Alexandre Augusto de Sá dos Santos (150056940@aluno.unb.br)
- * @brief Game class implementation file
+ * @brief State class implementation file
  * @version 0.1
  * @date 2022-06-26
  *
@@ -30,4 +30,8 @@ void State::Update(float dt){
 
 void State::Render(){
     // bg = Render();
+}
+
+bool State::QuitRequested(){
+    return quitRequested;
 }

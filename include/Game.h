@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2022
  *
  */
-#include <iostream>
+#include <string>
 #define INCLUDE_SDL_IMAGE
 #define INCLUDE_SDL_MIXER
 #include "SDL_include.h"
