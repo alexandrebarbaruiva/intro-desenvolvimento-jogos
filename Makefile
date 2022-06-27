@@ -15,12 +15,14 @@ RFLAGS = -O3 -mtune=native
 
 INC_PATH = include
 SRC_PATH = src
+TEST_PATH = tests
 BIN_PATH = bin
 DEP_PATH = dep
 
 CPP_FILES = $(wildcard $(SRC_PATH)/*.cpp)
 INC_FILES = $(wildcard $(SRC_PATH)/*.hpp)
 FILE_NAMES = $(sort $(notdir $(CPP_FILES:.cpp=)) $(notdir $(INC_FILES:.h=)))
+TEST_FILE_NAME = $(wildcard $(TEST_PATH)/tests.cpp)
 DEP_FILES = $(addprefix $(DEP_PATH)/,$(addsuffix .d,$(FILE_NAMES)))
 OBJ_FILES = $(addprefix $(BIN_PATH)/,$(notdir $(CPP_FILES:.cpp=.o)))
 
@@ -77,6 +79,9 @@ release: $(EXEC)
 
 debug: FLAGS += $(DFLAGS)
 debug: $(EXEC)
+
+test:
+	$(COMPILER) $(TEST_FILE_NAME) -o $@.out $^ $(LINK_PATH) $(LIBS) $(FLAGS)
 
 folders:
 ifeq ($(OS), Windows_NT)
