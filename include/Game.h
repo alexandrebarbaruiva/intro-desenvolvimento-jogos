@@ -24,6 +24,7 @@ class Game
 private:
     /* data */
     static Game *instance;
+    std::string windowTitle;
 
     int SDL_Window_Flags = 0;
     int SDL_Image_Flags = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF;
@@ -55,6 +56,8 @@ public:
 
     // Method for getting current game State
     // State GetState();
+
+    std::string getTitle();
 };
 
 // Links:

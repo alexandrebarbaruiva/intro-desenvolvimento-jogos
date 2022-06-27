@@ -14,7 +14,6 @@
 Game::Game(std::string title, int width, int height)
 {
     SDL_Log("Starting game");
-
     // Check for any SDL initialization error
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0)
     {
@@ -56,6 +55,7 @@ Game::Game(std::string title, int width, int height)
         height,                 // height, in pixels
         SDL_Window_Flags        // flags
     );
+    windowTitle = title;
 
     // Check if window has been successfully created
     if (window == nullptr)
@@ -106,6 +106,10 @@ Game::~Game()
 SDL_Renderer *Game::GetRenderer()
 {
     return renderer;
+}
+
+std::string Game::getTitle(){
+    return windowTitle;
 }
 
 Game *Game::instance{nullptr};

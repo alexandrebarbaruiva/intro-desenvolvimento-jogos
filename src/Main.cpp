@@ -14,6 +14,6 @@
 int main(int argc, char** argv)
 {
     Game *game = Game::GetInstance();
-    std::cout << game->title() << std::endl;
+    std::cout << game->getTitle() << std::endl;
     return 0;
 }
