@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2022
  *
  */
+#ifndef SPRITE_HEADER
+#define SPRITE_HEADER
 #define INCLUDE_SDL_IMAGE
 #define INCLUDE_SDL_MIXER
 #include "SDL_include.h"
@@ -38,5 +40,5 @@ public:
     int GetHeight();
 
     bool IsOpen();
-
 };
+#endif

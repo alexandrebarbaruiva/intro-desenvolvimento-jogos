@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2022
  *
  */
+#ifndef MUSIC_HEADER
+#define MUSIC_HEADER
 #define INCLUDE_SDL_IMAGE
 #define INCLUDE_SDL_MIXER
 #include "SDL_include.h"
@@ -28,3 +30,4 @@ public:
     void Open(std::string file);
     bool IsOpen();
 };
+#endif

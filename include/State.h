@@ -8,14 +8,17 @@
  * @copyright Copyright (c) 2022
  *
  */
+#ifndef STATE_HEADER
+#define STATE_HEADER
 #define INCLUDE_SDL_IMAGE
 #define INCLUDE_SDL_MIXER
 #include "SDL_include.h"
+#include "Sprite.h"
 
 class State
 {
 private:
-    // Sprite bg;
+    Sprite *bg;
     // Music music;
     bool quitRequested;
 
@@ -27,3 +30,4 @@ public:
     void Update(float dt);
     void Render();
 };
+#endif

@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2022
  *
  */
+#ifndef GAME_HEADER
+#define GAME_HEADER
 #include <string>
 #define INCLUDE_SDL_IMAGE
 #define INCLUDE_SDL_MIXER
@@ -64,7 +66,9 @@ public:
 
     std::string getTitle();
 };
+#endif
 
 // Links:
 // https://www.geeksforgeeks.org/pointers-vs-references-cpp/
 // https://stackoverflow.com/questions/1008019/c-singleton-design-pattern
+// https://stackoverflow.com/questions/3246803/why-use-ifndef-class-h-and-define-class-h-in-h-file-but-not-in-cpp
