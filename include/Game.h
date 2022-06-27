@@ -12,6 +12,7 @@
 #define INCLUDE_SDL_IMAGE
 #define INCLUDE_SDL_MIXER
 #include "SDL_include.h"
+#include "../include/State.h"
 
 // Game class using the Singleton's design pattern, which allows
 // only one instance to exist at any given moment. For that to be
@@ -32,7 +33,7 @@ private:
 
     SDL_Window *window;
     SDL_Renderer *renderer;
-    // State *state;
+    State *state;
 
 protected:
     Game(std::string title, int width, int height);
@@ -44,6 +45,10 @@ public:
     ~Game();
 
     // Game loop
+    // 1. Load screens
+    // 2. Input data is processed
+    // 3. States are updated
+    // 4. Objects are drawn on screen
     void Run();
 
     // Method for controlling access to the single instance.
@@ -55,7 +60,7 @@ public:
     SDL_Renderer *GetRenderer();
 
     // Method for getting current game State
-    // State GetState();
+    State GetState();
 
     std::string getTitle();
 };

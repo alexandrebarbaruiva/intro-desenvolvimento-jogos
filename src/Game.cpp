@@ -80,8 +80,8 @@ Game::Game(std::string title, int width, int height)
     // state = new State()
 
     // Move following lines to destructor ASAP
-    // SDL_Delay(5000);
-    // SDL_Log("Destroying window");
+    SDL_Delay(5000);
+    SDL_Log("Constructor finished");
     // SDL_DestroyWindow(window);
     // SDL_Quit();
 }
@@ -126,4 +126,10 @@ Game *Game::GetInstance()
 
 void Game::Run()
 {
+    while (!state->QuitRequested())
+    {
+        SDL_RenderPresent(renderer);
+        SDL_Delay(33);
+    }
+    
 }
