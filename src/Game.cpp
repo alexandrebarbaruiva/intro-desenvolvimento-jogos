@@ -8,12 +8,19 @@
  * @copyright Copyright (c) 2022
  *
  */
-#include <string>
+#include <iostream>
 #include "../include/Game.h"
 
 Game::Game(std::string title, int width, int height)
 {
     SDL_Log("Starting game");
+    if (instance != nullptr)
+    {
+        std::cout << "Game is not obeying Singleton laws" << std::endl;
+    }
+
+    instance = this;
+
     // Check for any SDL initialization error
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0)
     {
@@ -115,7 +122,7 @@ Game *Game::GetInstance()
 {
     if (instance == nullptr)
     {
-        instance = new Game("Alexandre Augusto de Sá dos Santos 15/00156940", 1024, 600);
+        new Game("Alexandre Augusto de Sá dos Santos 15/00156940", 1024, 600);
     }
     return instance;
 }
