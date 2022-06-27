@@ -128,6 +128,8 @@ void Game::Run()
 {
     while (!state->QuitRequested())
     {
+        state->Update(0);
+        state->Render();
         SDL_RenderPresent(renderer);
         SDL_Delay(33);
     }
