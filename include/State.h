@@ -14,12 +14,13 @@
 #define INCLUDE_SDL_MIXER
 #include "SDL_include.h"
 #include "Sprite.h"
+#include "Music.h"
 
 class State
 {
 private:
     Sprite *bg;
-    // Music music;
+    Music *music;
     bool quitRequested;
 
 public:
