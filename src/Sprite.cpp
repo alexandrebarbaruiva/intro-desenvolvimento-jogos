@@ -19,7 +19,7 @@ Sprite::Sprite()
 
 Sprite::Sprite(std::string file)
 {
-    Sprite();
+    texture = nullptr;
     Open(file);
 }
 
@@ -49,6 +49,7 @@ void Sprite::Open(std::string file)
     {
         SDL_LogError(0, "Unable to query texture: %s", IMG_GetError());
     }
+    SetClip(0, 0, 1024, 600);
 }
 
 void Sprite::SetClip(int x, int y, int w, int h)
