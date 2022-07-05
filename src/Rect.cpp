@@ -32,8 +32,5 @@ bool Rect::Contains(Vec2 vector)
 
 Vec2 Rect::Center()
 {
-    Vec2 centerImage = Vec2(0, 0);
-    centerImage.x = (x + w) / 2;
-    centerImage.y = (y + h) / 2;
-    return centerImage;
+    return Vec2(((x + w) / 2), ((y + h) / 2));
 }

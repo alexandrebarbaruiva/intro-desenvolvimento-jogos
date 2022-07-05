@@ -17,8 +17,7 @@ Sprite::Sprite(GameObject &associated) : Component(associated)
     texture = nullptr;
 }
 
-// TODO: mudar Component pra Sprite
-Sprite::Sprite(GameObject &associated, std::string file) : Component(associated)
+Sprite::Sprite(GameObject &associated, std::string file) : Sprite(associated)
 {
     texture = nullptr;
     Open(file);

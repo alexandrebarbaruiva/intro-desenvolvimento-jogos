@@ -13,6 +13,8 @@
 
 Game::Game(std::string title, int width, int height)
 {
+    // Randomize penguin appearence
+    srand(time(NULL));
     SDL_Log("Starting game");
     if (instance != nullptr)
     {

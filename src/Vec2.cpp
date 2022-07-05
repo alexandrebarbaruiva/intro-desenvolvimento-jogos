@@ -20,15 +20,17 @@ Vec2::~Vec2()
 {
 }
 
-Vec2 Vec2::GetRotated(float rotation){
-    float newX = cos(rotation);
-    float newY = sin(rotation);
+Vec2 Vec2::GetRotated(float rotation)
+{
+    float newX = ((x * cos(rotation)) - (y * sin(rotation)));
+    float newY = ((y * cos(rotation)) - (x * sin(rotation)));
     return Vec2(newX, newY);
 }
 
-Vec2 Vec2::operator+(Vec2 const &vector){
+Vec2 Vec2::operator+(Vec2 const &vector)
+{
     Vec2 newVector = Vec2(0, 0);
     newVector.x = this->x + vector.x;
-    newVector.y = this->y + vector.y; 
+    newVector.y = this->y + vector.y;
     return newVector;
 }

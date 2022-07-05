@@ -82,8 +82,8 @@ void State::AddObject(int mouseX, int mouseY)
     firstEnemy->AddComponent(penguinFace);
 
     // Add position to centralize image
-    firstEnemy->box.x = mouseX + firstEnemy->box.Center().x;
-    firstEnemy->box.y = mouseY + firstEnemy->box.Center().y;
+    firstEnemy->box.x = mouseX - firstEnemy->box.Center().x;
+    firstEnemy->box.y = mouseY - firstEnemy->box.Center().y;
 
     // Add sound
     Sound *penguinSound = new Sound(*firstEnemy, "assets/audio/boom.wav");
