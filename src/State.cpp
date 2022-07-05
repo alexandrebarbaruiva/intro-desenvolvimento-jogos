@@ -10,30 +10,88 @@
  */
 #include "../include/State.h"
 
-State::State() {
+State::State()
+{
     quitRequested = false;
-    bg = new Sprite("assets/img/ocean.jpg");
+
+    GameObject *gameObject = new GameObject();
+    bg = new Sprite(*gameObject, "assets/img/ocean.jpg");
+
+    gameObject->AddComponent(bg);
+
+    objectArray.emplace_back(gameObject);
+    bg->Render();
+
     music = new Music("assets/audio/stageState.ogg");
     music->Play();
 }
 
-void State::LoadAssets(){
+State::~State()
+{
+    objectArray.clear();
+}
+
+void State::LoadAssets()
+{
     // Load music, images, fonts here.
 }
 
-void State::Update(float dt){
-    // Updates entities' state
-    if (SDL_QuitRequested())
+void State::Update(float dt)
+{
+    Input();
+    for (int pos = 0; pos < (int)objectArray.size(); pos++)
     {
-        quitRequested = true;
+        objectArray[pos].get()->Update(dt);
     }
-    
+    // Check for dead GOs
+    for (int pos = 0; pos < (int)objectArray.size(); pos++)
+    {
+        if (objectArray[pos].get()->IsDead())
+        {
+            objectArray[pos].get()->RemoveComponent(objectArray[pos].get()->GetComponent("Sprite"));
+            objectArray[pos].get()->RemoveComponent(objectArray[pos].get()->GetComponent("Face"));
+            Sound *soundToDelete = (Sound *)objectArray[pos].get()->GetComponent("Sound");
+            if ((!soundToDelete ->IsOpen()) || (soundToDelete == nullptr))
+            {
+                objectArray[pos].get()->RemoveComponent(soundToDelete);
+                objectArray.erase(objectArray.begin() + pos);
+            }
+        }
+    }
 }
 
-void State::Render(){
-    bg->Render(0, 0);
+void State::Render()
+{
+    for (int pos = 0; pos < (int)objectArray.size(); pos++)
+    {
+        objectArray[pos].get()->Render();
+    }
 }
 
-bool State::QuitRequested(){
+bool State::QuitRequested()
+{
     return quitRequested;
+}
+
+void State::AddObject(int mouseX, int mouseY)
+{
+    GameObject *firstEnemy = new GameObject();
+
+    // Add image to enemy
+    Sprite *penguinFace = new Sprite(*firstEnemy, "assets/img/penguinface.png");
+    firstEnemy->AddComponent(penguinFace);
+
+    // Add position to centralize image
+    firstEnemy->box.x = mouseX + firstEnemy->box.Center().x;
+    firstEnemy->box.y = mouseY + firstEnemy->box.Center().y;
+
+    // Add sound
+    Sound *penguinSound = new Sound(*firstEnemy, "assets/audio/boom.wav");
+    firstEnemy->AddComponent(penguinSound);
+
+    // Add Face
+    Face *face = new Face(*firstEnemy);
+    firstEnemy->AddComponent(face);
+
+    objectArray.emplace_back(firstEnemy);
 }

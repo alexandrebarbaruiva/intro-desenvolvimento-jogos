@@ -10,10 +10,10 @@
  */
 #ifndef GAME_HEADER
 #define GAME_HEADER
-#include <string>
 #define INCLUDE_SDL_IMAGE
 #define INCLUDE_SDL_MIXER
 #include "SDL_include.h"
+#include <string>
 #include "State.h"
 
 // Game class using the Singleton's design pattern, which allows
@@ -62,7 +62,7 @@ public:
     SDL_Renderer *GetRenderer();
 
     // Method for getting current game State
-    State GetState();
+    State &GetState();
 
     std::string getTitle();
 };

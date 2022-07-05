@@ -100,7 +100,7 @@ Game::~Game()
     SDL_Quit();
 }
 
-State Game::GetState()
+State &Game::GetState()
 {
     return *state;
 }

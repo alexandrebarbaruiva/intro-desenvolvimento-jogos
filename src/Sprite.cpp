@@ -12,12 +12,13 @@
 #include "../include/Game.h"
 #include <string>
 
-Sprite::Sprite()
+Sprite::Sprite(GameObject &associated) : Component(associated)
 {
     texture = nullptr;
 }
 
-Sprite::Sprite(std::string file)
+// TODO: mudar Component pra Sprite
+Sprite::Sprite(GameObject &associated, std::string file) : Component(associated)
 {
     texture = nullptr;
     Open(file);
@@ -49,7 +50,11 @@ void Sprite::Open(std::string file)
     {
         SDL_LogError(0, "Unable to query texture: %s", IMG_GetError());
     }
-    SetClip(0, 0, 1024, 600);
+    SetClip(0, 0, width, height);
+    associated.box.x = 0;
+    associated.box.y = 0;
+    associated.box.w = width;
+    associated.box.h = height;
 }
 
 void Sprite::SetClip(int x, int y, int w, int h)
@@ -60,20 +65,21 @@ void Sprite::SetClip(int x, int y, int w, int h)
     clipRect.h = h;
 }
 
-void Sprite::Render(int x, int y)
+void Sprite::Render()
 {
     SDL_Rect dst;
-    dst.x = x;
-    dst.y = y;
-    dst.w = clipRect.w;
-    dst.h = clipRect.h;
+    dst.x = associated.box.x;
+    dst.y = associated.box.y;
+    dst.w = associated.box.w;
+    dst.h = associated.box.h;
 
     if (SDL_RenderCopy(
-        Game::GetInstance()->GetRenderer(), // renderer
-        texture,                            // texture
-        &clipRect,                           // source rect
-        &dst                                 // destination rect
-    )){
+            Game::GetInstance()->GetRenderer(), // renderer
+            texture,                            // texture
+            &clipRect,                          // source rect
+            &dst                                // destination rect
+            ))
+    {
         SDL_LogError(0, "Unable to render copy: %s", IMG_GetError());
     }
 }
@@ -91,6 +97,19 @@ int Sprite::GetHeight()
 bool Sprite::IsOpen()
 {
     if (texture != nullptr)
+    {
+        return true;
+    }
+    return false;
+}
+
+void Sprite::Update(float dt)
+{
+}
+
+bool Sprite::Is(std::string type)
+{
+    if (type == "Sprite")
     {
         return true;
     }
