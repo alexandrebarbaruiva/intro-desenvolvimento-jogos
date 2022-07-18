@@ -14,6 +14,7 @@
 #define INCLUDE_SDL_MIXER
 #include "SDL_include.h"
 #include "GameObject.h"
+#include "Resources.h"
 #include "Component.h"
 #include <string>
 

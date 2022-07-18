@@ -25,7 +25,6 @@ Sprite::Sprite(GameObject &associated, std::string file) : Sprite(associated)
 
 Sprite::~Sprite()
 {
-    // SDL_DestroyTexture(texture);
 }
 
 void Sprite::Open(std::string file)

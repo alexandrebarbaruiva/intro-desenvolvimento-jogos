@@ -11,6 +11,7 @@
 #include <iostream>
 #include "../include/Sound.h"
 
+
 Sound::Sound(GameObject &associated) : Component(associated)
 {
     chunk = nullptr;
@@ -52,11 +53,7 @@ void Sound::Stop()
 
 void Sound::Open(std::string file)
 {
-    chunk = Mix_LoadWAV(file.c_str());
-    if (chunk == nullptr)
-    {
-        SDL_LogError(0, "Não foi possível carregar o arquivo WAV");
-    }
+    chunk = Resources::GetSound(file);
 }
 
 bool Sound::IsOpen()

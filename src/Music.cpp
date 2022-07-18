@@ -29,7 +29,7 @@ Music::~Music()
 
 void Music::Open(std::string file)
 {
-    music = Mix_LoadMUS(file.c_str());
+    music = Resources::GetMusic(file);
 }
 
 void Music::Play(int times)

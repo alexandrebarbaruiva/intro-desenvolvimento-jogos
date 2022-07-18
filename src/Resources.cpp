@@ -9,6 +9,11 @@
  *
  */
 #include "../include/Resources.h"
+#include "../include/Game.h"
+
+std::unordered_map<std::string, SDL_Texture *> Resources::imageTable;
+std::unordered_map<std::string, Mix_Music *> Resources::musicTable;
+std::unordered_map<std::string, Mix_Chunk *> Resources::soundTable;
 
 Resources::Resources(/* args */)
 {
