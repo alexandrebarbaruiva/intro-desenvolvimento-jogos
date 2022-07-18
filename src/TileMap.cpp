@@ -13,6 +13,7 @@
 #include <sstream>
 #include <iostream>
 
+
 TileMap::TileMap(GameObject &associated, std::string file, TileSet *tileSet) : Component(associated)
 {
     this->Load(file);
@@ -26,6 +27,11 @@ TileMap::~TileMap()
 void TileMap::Load(std::string file)
 {
     std::ifstream tileFile(file);
+    if (!tileFile.is_open())
+    {
+        SDL_LogError(0, "tileMap file not found");
+    }
+
     std::stringstream tileContent;
     tileContent << tileFile.rdbuf();
     std::string token;

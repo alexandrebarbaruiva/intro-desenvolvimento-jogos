@@ -74,7 +74,7 @@ void Sprite::Render(int x, int y, int w, int h)
             &dst                                // destination rect
             ))
     {
-        SDL_LogError(0, "Unable to render copy: %s", IMG_GetError());
+        SDL_LogError(0, "Unable to render sprite: %s", IMG_GetError());
     }
 }
 

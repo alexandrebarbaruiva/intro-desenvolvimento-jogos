@@ -37,7 +37,7 @@ void Sound::Play(int times)
 {
     if (!IsOpen())
     {
-        SDL_LogError(0, "Som não se encontra aberto.");
+        SDL_LogError(0, "No sound loaded: %s", SDL_GetError());
     }
     channel = Mix_PlayChannel(-1, chunk, times);
     Mix_VolumeChunk(chunk, 80);
