@@ -11,7 +11,6 @@
 #include <iostream>
 #include "../include/Sound.h"
 
-
 Sound::Sound(GameObject &associated) : Component(associated)
 {
     chunk = nullptr;
@@ -30,7 +29,6 @@ Sound::~Sound()
         Mix_FreeChunk(chunk);
         chunk = nullptr;
     }
-    
 }
 
 void Sound::Play(int times)

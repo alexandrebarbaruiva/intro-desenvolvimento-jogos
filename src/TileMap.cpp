@@ -13,7 +13,6 @@
 #include <sstream>
 #include <iostream>
 
-
 TileMap::TileMap(GameObject &associated, std::string file, TileSet *tileSet) : Component(associated)
 {
     this->Load(file);

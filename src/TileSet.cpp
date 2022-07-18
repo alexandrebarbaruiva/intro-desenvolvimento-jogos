@@ -34,8 +34,8 @@ TileSet::~TileSet()
 
 void TileSet::RenderTile(unsigned index, float x, float y)
 {
-    
-    if (index < unsigned (rows * columns))
+
+    if (index < unsigned(rows * columns))
     {
         // Calculate position on player map
         int currentX = (index % columns) * tileWidth;

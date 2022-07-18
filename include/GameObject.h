@@ -19,7 +19,6 @@
 #include <memory>
 #include <iostream>
 
-
 class Component;
 
 class GameObject

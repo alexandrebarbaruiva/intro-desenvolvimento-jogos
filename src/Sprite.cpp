@@ -11,7 +11,6 @@
 #include "../include/Sprite.h"
 #include "../include/Game.h"
 
-
 Sprite::Sprite(GameObject &associated) : Component(associated)
 {
     texture = nullptr;
