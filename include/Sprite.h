@@ -14,6 +14,7 @@
 #define INCLUDE_SDL_MIXER
 #include "SDL_include.h"
 #include "Component.h"
+#include "Resources.h"
 #include <string>
 
 class Sprite : public Component
@@ -30,10 +31,9 @@ public:
 
     ~Sprite();
 
-    std::string type = "Sprite";
-
     void Open(std::string file);
     void SetClip(int x, int y, int w, int h);
+    void Render(int x, int y, int w, int h);
     void Render();
     int GetWidth();
     int GetHeight();

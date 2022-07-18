@@ -10,7 +10,7 @@
  */
 #include "../include/Sprite.h"
 #include "../include/Game.h"
-#include <string>
+
 
 Sprite::Sprite(GameObject &associated) : Component(associated)
 {
@@ -25,16 +25,12 @@ Sprite::Sprite(GameObject &associated, std::string file) : Sprite(associated)
 
 Sprite::~Sprite()
 {
-    SDL_DestroyTexture(texture);
+    // SDL_DestroyTexture(texture);
 }
 
 void Sprite::Open(std::string file)
 {
-    if (IsOpen())
-    {
-        texture = nullptr;
-    }
-    texture = IMG_LoadTexture(Game::GetInstance()->GetRenderer(), file.c_str());
+    texture = Resources::GetImage(file);
     if (!IsOpen())
     {
         SDL_LogError(0, "Unable to load texture: %s", IMG_GetError());
@@ -64,13 +60,13 @@ void Sprite::SetClip(int x, int y, int w, int h)
     clipRect.h = h;
 }
 
-void Sprite::Render()
+void Sprite::Render(int x, int y, int w, int h)
 {
     SDL_Rect dst;
-    dst.x = associated.box.x;
-    dst.y = associated.box.y;
-    dst.w = associated.box.w;
-    dst.h = associated.box.h;
+    dst.x = x;
+    dst.y = y;
+    dst.w = w;
+    dst.h = h;
 
     if (SDL_RenderCopy(
             Game::GetInstance()->GetRenderer(), // renderer
@@ -81,6 +77,11 @@ void Sprite::Render()
     {
         SDL_LogError(0, "Unable to render copy: %s", IMG_GetError());
     }
+}
+
+void Sprite::Render()
+{
+    this->Render(associated.box.x, associated.box.y, associated.box.w, associated.box.h);
 }
 
 int Sprite::GetWidth()
@@ -108,9 +109,5 @@ void Sprite::Update(float dt)
 
 bool Sprite::Is(std::string type)
 {
-    if (type == "Sprite")
-    {
-        return true;
-    }
-    return false;
+    return (type == "Sprite");
 }

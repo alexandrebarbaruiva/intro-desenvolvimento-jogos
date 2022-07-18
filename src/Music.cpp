@@ -41,6 +41,7 @@ void Music::Play(int times)
     else
     {
         Mix_PlayMusic(music, times);
+        Mix_VolumeMusic(80);
     }
 }
 

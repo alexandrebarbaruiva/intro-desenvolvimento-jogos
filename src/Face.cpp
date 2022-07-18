@@ -47,9 +47,5 @@ void Face::Render()
 
 bool Face::Is(std::string type)
 {
-    if (type == "Face")
-    {
-        return true;
-    }
-    return false;
+    return (type == "Face");
 }

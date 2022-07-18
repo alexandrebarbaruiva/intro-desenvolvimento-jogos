@@ -22,7 +22,7 @@ DEP_PATH = dep
 CPP_FILES = $(wildcard $(SRC_PATH)/*.cpp)
 INC_FILES = $(wildcard $(SRC_PATH)/*.hpp)
 FILE_NAMES = $(sort $(notdir $(CPP_FILES:.cpp=)) $(notdir $(INC_FILES:.h=)))
-TEST_FILE_NAME = $(wildcard $(TEST_PATH)/Tests.cpp)
+TEST_FILE_NAME = $(wildcard $(TEST_PATH)/*.cpp)
 DEP_FILES = $(addprefix $(DEP_PATH)/,$(addsuffix .d,$(FILE_NAMES)))
 OBJ_FILES = $(addprefix $(BIN_PATH)/,$(notdir $(CPP_FILES:.cpp=.o)))
 

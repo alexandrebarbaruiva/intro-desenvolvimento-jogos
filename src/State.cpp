@@ -14,13 +14,20 @@ State::State()
 {
     quitRequested = false;
 
-    GameObject *gameObject = new GameObject();
-    bg = new Sprite(*gameObject, "assets/img/ocean.jpg");
+    GameObject *gameObjectOcean = new GameObject();
 
-    gameObject->AddComponent(bg);
+    Sprite *bg = new Sprite(*gameObjectOcean, "assets/img/ocean.jpg");
+    gameObjectOcean->AddComponent(bg);
+    objectArray.emplace_back(gameObjectOcean);
 
-    objectArray.emplace_back(gameObject);
-    bg->Render();
+    GameObject *gameObjectMap = new GameObject();
+
+    TileSet *tileSet = new TileSet(64, 64, "assets/img/tileset.png");
+    TileMap *tileMap = new TileMap(*gameObjectMap, "assets/map/tileMap.txt", tileSet);
+    gameObjectMap->AddComponent(tileMap);
+    gameObjectMap->box.x = 0;
+    gameObjectMap->box.y = 0;
+    objectArray.emplace_back(gameObjectMap);
 
     music = new Music("assets/audio/stageState.ogg");
     music->Play();
@@ -51,7 +58,7 @@ void State::Update(float dt)
             objectArray[pos].get()->RemoveComponent(objectArray[pos].get()->GetComponent("Sprite"));
             objectArray[pos].get()->RemoveComponent(objectArray[pos].get()->GetComponent("Face"));
             Sound *soundToDelete = (Sound *)objectArray[pos].get()->GetComponent("Sound");
-            if ((!soundToDelete ->IsOpen()) || (soundToDelete == nullptr))
+            if ((!soundToDelete->IsOpen()) || (soundToDelete == nullptr))
             {
                 objectArray[pos].get()->RemoveComponent(soundToDelete);
                 objectArray.erase(objectArray.begin() + pos);

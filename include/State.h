@@ -20,6 +20,8 @@
 #include "Sound.h"
 #include "GameObject.h"
 #include "Face.h"
+#include "TileSet.h"
+#include "TileMap.h"
 
 class State
 {

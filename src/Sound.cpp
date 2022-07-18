@@ -34,7 +34,12 @@ Sound::~Sound()
 
 void Sound::Play(int times)
 {
+    if (!IsOpen())
+    {
+        SDL_LogError(0, "Som não se encontra aberto.");
+    }
     channel = Mix_PlayChannel(-1, chunk, times);
+    Mix_VolumeChunk(chunk, 80);
 }
 
 void Sound::Stop()
@@ -73,9 +78,5 @@ void Sound::Render()
 
 bool Sound::Is(std::string type)
 {
-    if (type == "Sound")
-    {
-        return true;
-    }
-    return false;
+    return (type == "Sound");
 }
