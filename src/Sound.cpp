@@ -23,22 +23,16 @@ Sound::Sound(GameObject &associated, std::string file) : Sound(associated)
 
 Sound::~Sound()
 {
-    Stop();
-    if (chunk != nullptr)
-    {
-        Mix_FreeChunk(chunk);
-        chunk = nullptr;
-    }
 }
 
 void Sound::Play(int times)
 {
-    if (!IsOpen())
+    channel = Mix_PlayChannel(-1, chunk, times - 1);
+    Mix_VolumeChunk(chunk, 50);
+    if (channel == -1)
     {
-        SDL_LogError(0, "No sound loaded: %s", SDL_GetError());
+        SDL_LogError(0, "No sound loaded: %s", Mix_GetError());
     }
-    channel = Mix_PlayChannel(-1, chunk, times);
-    Mix_VolumeChunk(chunk, 80);
 }
 
 void Sound::Stop()
@@ -52,11 +46,15 @@ void Sound::Stop()
 void Sound::Open(std::string file)
 {
     chunk = Resources::GetSound(file);
+    if (chunk == nullptr)
+    {
+        SDL_LogError(0, "Sound couldn't be opened: %s", Mix_GetError());
+    }
 }
 
 bool Sound::IsOpen()
 {
-    if (Mix_Playing(channel) && chunk != nullptr)
+    if (Mix_Playing(channel))
     {
         return true;
     }
