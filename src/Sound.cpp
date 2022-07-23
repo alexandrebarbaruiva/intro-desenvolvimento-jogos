@@ -34,7 +34,12 @@ Sound::~Sound()
 
 void Sound::Play(int times)
 {
-    channel = Mix_PlayChannel(-1, chunk, times);
+    channel = Mix_PlayChannel(-1, chunk, times - 1);
+    Mix_VolumeChunk(chunk, 50);
+    if (channel == -1)
+    {
+        SDL_LogError(0, "No sound loaded: %s", Mix_GetError());
+    }
 }
 
 void Sound::Stop()
