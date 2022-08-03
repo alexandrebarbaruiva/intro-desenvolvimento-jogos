@@ -64,6 +64,7 @@ void GameObject::RemoveComponent(Component *cpt)
         if (components[pos].get() == cpt)
         {
             components.erase(components.begin() + pos);
+            break;
         }
     }
 }
