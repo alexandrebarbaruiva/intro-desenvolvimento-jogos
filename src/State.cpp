@@ -65,6 +65,11 @@ void State::Update(float dt)
             }
         }
     }
+    // Updates entities' state
+    if (QuitRequested())
+    {
+        music->~Music();
+    }
 }
 
 void State::Render()
