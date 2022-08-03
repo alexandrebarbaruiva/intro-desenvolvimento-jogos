@@ -26,6 +26,7 @@ void State::Update(float dt){
     if (SDL_QuitRequested())
     {
         quitRequested = true;
+        music->~Music();
     }
     
 }
