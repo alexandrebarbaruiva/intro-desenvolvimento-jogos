@@ -10,31 +10,35 @@
  */
 #include "../include/State.h"
 
-State::State() {
+State::State()
+{
     quitRequested = false;
     bg = new Sprite("assets/img/ocean.jpg");
     music = new Music("assets/audio/stageState.ogg");
     music->Play();
 }
 
-void State::LoadAssets(){
+void State::LoadAssets()
+{
     // Load music, images, fonts here.
 }
 
-void State::Update(float dt){
+void State::Update(float dt)
+{
     // Updates entities' state
     if (SDL_QuitRequested())
     {
         quitRequested = true;
         music->~Music();
     }
-    
 }
 
-void State::Render(){
+void State::Render()
+{
     bg->Render(0, 0);
 }
 
-bool State::QuitRequested(){
+bool State::QuitRequested()
+{
     return quitRequested;
 }
