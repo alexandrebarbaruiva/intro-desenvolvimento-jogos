@@ -39,6 +39,7 @@ SDL_Texture *Resources::GetImage(std::string file)
 
 void Resources::ClearImages()
 {
+    std::coutCLEAR IMAGE\n";
     for (auto imageCell : imageTable)
     {
         SDL_DestroyTexture(imageCell.second);

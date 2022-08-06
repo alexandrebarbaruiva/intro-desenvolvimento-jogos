@@ -23,8 +23,6 @@ Music::Music(std::string file)
 
 Music::~Music()
 {
-    Stop();
-    Mix_FreeMusic(music);
 }
 
 void Music::Open(std::string file)

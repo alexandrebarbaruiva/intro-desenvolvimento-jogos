@@ -55,14 +55,7 @@ void State::Update(float dt)
     {
         if (objectArray[pos].get()->IsDead())
         {
-            objectArray[pos].get()->RemoveComponent(objectArray[pos].get()->GetComponent("Sprite"));
-            objectArray[pos].get()->RemoveComponent(objectArray[pos].get()->GetComponent("Face"));
-            Sound *soundToDelete = (Sound *)objectArray[pos].get()->GetComponent("Sound");
-            if ((!soundToDelete->IsOpen()) || (soundToDelete == nullptr))
-            {
-                objectArray[pos].get()->RemoveComponent(soundToDelete);
-                objectArray.erase(objectArray.begin() + pos);
-            }
+            objectArray.erase(objectArray.begin() + pos);
         }
     }
     // Updates entities' state
