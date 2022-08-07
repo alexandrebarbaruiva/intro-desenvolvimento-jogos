@@ -23,7 +23,7 @@ Music::Music(std::string file)
 
 Music::~Music()
 {
-    Stop();
+    Stop(1500);
     Mix_FreeMusic(music);
 }
 
