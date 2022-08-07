@@ -13,6 +13,7 @@
 #define INCLUDE_SDL_IMAGE
 #define INCLUDE_SDL_MIXER
 #include "SDL_include.h"
+#include <unordered_map>
 #include <string>
 
 class InputManager
@@ -21,8 +22,8 @@ private:
     int mouseUpdate[6];
     bool mouseState[6];
 
-    // keyState
-    // keuUpdate
+    std::unordered_map<int, bool> keyState;
+    std::unordered_map<int, int> keyUpdate;
 
     bool quitRequested;
     int updateCounter;

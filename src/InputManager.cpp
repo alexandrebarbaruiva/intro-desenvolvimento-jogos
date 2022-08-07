@@ -11,7 +11,7 @@
 #include <iostream>
 #include "../include/InputManager.h"
 
-InputManager::InputManager() : Component(associated)
+InputManager::InputManager()
 {
 }
 
@@ -19,19 +19,58 @@ InputManager::~InputManager()
 {
 }
 
-void InputManager::Damage(int damage)
+InputManager &InputManager::GetInstance()
+{
+    // Meyer's Singleton
+    static InputManager instance;
+    return instance;
+}
+
+void InputManager::Update()
 {
 }
 
-void InputManager::Update(float dt)
+bool InputManager::KeyPress(int key)
 {
+    return true;
 }
 
-void InputManager::Render()
+bool InputManager::KeyRelease(int key)
 {
+    return true;
 }
 
-bool InputManager::Is(std::string type)
+bool InputManager::IsKeyDown(int key)
 {
-    return (type == "InputManager");
+    return true;
+}
+
+bool InputManager::MousePress(int button)
+{
+    return true;
+}
+
+bool InputManager::MouseRelease(int button)
+{
+    return true;
+}
+
+bool InputManager::IsMouseDown(int button)
+{
+    return true;
+}
+
+int InputManager::GetMouseX()
+{
+    return 0;
+}
+
+int InputManager::GetMouseY()
+{
+    return 0;
+}
+
+bool InputManager::QuitRequested()
+{
+    return true;
 }
