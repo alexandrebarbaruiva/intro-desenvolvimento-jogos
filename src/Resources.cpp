@@ -39,6 +39,7 @@ SDL_Texture *Resources::GetImage(std::string file)
 
 void Resources::ClearImages()
 {
+    Mix_FadeOutMusic(1500);
     for (auto imageCell : imageTable)
     {
         SDL_DestroyTexture(imageCell.second);
