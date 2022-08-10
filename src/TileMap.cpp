@@ -91,8 +91,9 @@ void TileMap::Render()
     {
         RenderLayer(
             layer,
-            Camera::pos.x * (layer + 1.1) / 1.1,
-            Camera::pos.y * (layer + 1.1) / 1.1);
+            Camera::pos.x * ((layer * 0.25) + 1),
+            Camera::pos.y * ((layer * 0.25) + 1)
+        );
     }
 }
 

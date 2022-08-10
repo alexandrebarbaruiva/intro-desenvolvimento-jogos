@@ -51,6 +51,6 @@ void Camera::Update(float dt)
         {
             speed += Vec2(0, 1);
         }
-        pos += speed * dt * 400;
+        pos += speed * dt * 200;
     }
 }
