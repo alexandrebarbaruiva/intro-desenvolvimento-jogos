@@ -67,11 +67,13 @@ void State::Update(float dt)
             objectArray.erase(objectArray.begin() + pos);
         }
     }
-    if (instance.IsKeyDown(CTRL_KEY))
+    // Create penguim
+    if (instance.IsKeyDown(SPACE_KEY))
     {
         Vec2 objPos = Vec2(200, 0).GetRotated(-M_PI + M_PI * (rand() % 1001) / 500.0) + Vec2(instance.GetMouseX(), instance.GetMouseY());
         AddObject((int)objPos.x, (int)objPos.y);
     }
+    // Quits game
     if (instance.IsKeyDown(ESCAPE_KEY) || instance.QuitRequested())
     {
         quitRequested = true;
