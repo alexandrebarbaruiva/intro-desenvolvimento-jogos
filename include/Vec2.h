@@ -20,6 +20,7 @@ private:
     /* data */
 public:
     Vec2(float x, float y);
+    Vec2();
     ~Vec2();
 
     float x;
@@ -28,6 +29,8 @@ public:
     Vec2 GetRotated(float rotation);
 
     Vec2 operator+(Vec2 const &vector);
+    Vec2 operator+=(Vec2 const &vector);
+    Vec2 operator*(float value);
 };
 
 #endif

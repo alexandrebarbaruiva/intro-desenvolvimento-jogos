@@ -16,6 +16,7 @@
 #include "GameObject.h"
 #include "Sprite.h"
 #include "TileSet.h"
+#include "Camera.h"
 #include <string>
 #include <vector>
 

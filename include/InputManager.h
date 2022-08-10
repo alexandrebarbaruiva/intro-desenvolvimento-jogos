@@ -12,6 +12,13 @@
 #define INPUT_HEADER
 #define INCLUDE_SDL_IMAGE
 #define INCLUDE_SDL_MIXER
+#define LEFT_ARROW_KEY SDLK_LEFT
+#define RIGHT_ARROW_KEY SDLK_RIGHT
+#define UP_ARROW_KEY SDLK_UP
+#define DOWN_ARROW_KEY SDLK_DOWN
+#define ESCAPE_KEY SDLK_ESCAPE
+#define CTRL_KEY SDLK_LCTRL
+#define LEFT_MOUSE_BUTTON SDL_BUTTON_LEFT
 #include "SDL_include.h"
 #include <unordered_map>
 #include <string>
@@ -30,11 +37,10 @@ private:
     int mouseX;
     int mouseY;
 
+public:
     InputManager();
     ~InputManager();
-
-public:
-    InputManager &GetInstance();
+    static InputManager &GetInstance();
     void Update();
 
     bool KeyPress(int key);

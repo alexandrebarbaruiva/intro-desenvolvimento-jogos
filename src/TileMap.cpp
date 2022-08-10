@@ -78,8 +78,8 @@ void TileMap::RenderLayer(int layer, int cameraX, int cameraY)
         for (int posX = 0; posX < this->GetWidth(); posX++)
         {
             int index = At(posX, posY, layer);
-            int y = posY * tileHeight;
-            int x = posX * tileWidth;
+            int y = (posY * tileHeight) - cameraY;
+            int x = (posX * tileWidth) - cameraX;
             tileSet->RenderTile(index, x, y);
         }
     }
@@ -89,7 +89,10 @@ void TileMap::Render()
 {
     for (int layer = 0; layer < this->GetDepth(); layer++)
     {
-        RenderLayer(layer, associated.box.x, associated.box.y);
+        RenderLayer(
+            layer,
+            Camera::pos.x * (layer + 1.1) / 1.1,
+            Camera::pos.y * (layer + 1.1) / 1.1);
     }
 }
 

@@ -15,6 +15,8 @@
 #include "SDL_include.h"
 #include "GameObject.h"
 #include "Vec2.h"
+#include "Camera.h"
+#include "Sprite.h"
 #include <string>
 
 class CameraFollower : public Component
@@ -23,7 +25,6 @@ private:
     /* data */
 public:
     CameraFollower(GameObject &go);
-    ~CameraFollower();
 
     void Update(float dt);
     void Render();

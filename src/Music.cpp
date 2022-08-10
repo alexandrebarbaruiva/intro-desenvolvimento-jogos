@@ -50,9 +50,5 @@ void Music::Stop(int msToStop)
 
 bool Music::IsOpen()
 {
-    if (music != nullptr)
-    {
-        return true;
-    }
-    return false;
+    return (music != nullptr);
 }

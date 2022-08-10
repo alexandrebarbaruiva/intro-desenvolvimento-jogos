@@ -15,23 +15,21 @@
 #include "SDL_include.h"
 #include "GameObject.h"
 #include "Vec2.h"
+#include "InputManager.h"
 #include <string>
 
 class Camera
 {
 private:
-    GameObject *focus;
+    static GameObject *focus;
 
 public:
-    Camera();
-    ~Camera();
+    static Vec2 pos;
+    static Vec2 speed;
 
-    Vec2 pos;
-    Vec2 speed;
-
-    void Follow(GameObject *newFocus);
-    void Unfollow();
-    void Update(float dt);
+    static void Follow(GameObject *newFocus);
+    static void Unfollow();
+    static void Update(float dt);
 };
 
 #endif

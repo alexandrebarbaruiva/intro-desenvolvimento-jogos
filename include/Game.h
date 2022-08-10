@@ -41,6 +41,8 @@ protected:
     Game(std::string title, int width, int height);
 
 public:
+    int frameStart;
+    float dt;
     // Singleton must not be cloneable nor assignable
     Game(Game &other) = delete;
     void operator=(const Game &) = delete;
@@ -65,6 +67,9 @@ public:
     State &GetState();
 
     std::string getTitle();
+
+    void CalculateDeltaTime();
+    float GetDeltaTime();
 };
 #endif
 

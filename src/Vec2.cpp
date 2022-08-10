@@ -16,6 +16,12 @@ Vec2::Vec2(float x, float y)
     this->y = y;
 }
 
+Vec2::Vec2()
+{
+    this->x = 0;
+    this->y = 0;
+}
+
 Vec2::~Vec2()
 {
 }
@@ -32,5 +38,19 @@ Vec2 Vec2::operator+(Vec2 const &vector)
     Vec2 newVector = Vec2(0, 0);
     newVector.x = this->x + vector.x;
     newVector.y = this->y + vector.y;
+    return newVector;
+}
+
+Vec2 Vec2::operator+=(Vec2 const &vector)
+{
+    *this = *this + vector;
+    return *this;
+}
+
+Vec2 Vec2::operator*(float value)
+{
+    Vec2 newVector = Vec2(0, 0);
+    newVector.x = this->x * value;
+    newVector.y = this->y * value;
     return newVector;
 }

@@ -23,11 +23,7 @@ bool Rect::Contains(Vec2 vector)
 {
     bool vectorInsideX = (vector.x > this->x) && (vector.x < (this->x + this->w));
     bool vectorInsideY = (vector.y > this->y) && (vector.y < (this->y + this->h));
-    if (vectorInsideX && vectorInsideY)
-    {
-        return true;
-    }
-    return false;
+    return (vectorInsideX && vectorInsideY);
 }
 
 Vec2 Rect::Center()

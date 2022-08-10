@@ -15,6 +15,8 @@
 #include "SDL_include.h"
 #include "Component.h"
 #include "Sound.h"
+#include "InputManager.h"
+#include "Camera.h"
 #include <string>
 
 class Face : public Component

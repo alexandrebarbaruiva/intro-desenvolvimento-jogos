@@ -29,8 +29,7 @@ void GameObject::Update(float dt)
 {
     for (int pos = 0; pos < (int)components.size(); pos++)
     {
-
-        components[pos].get()->Update(dt);
+        components[pos]->Update(dt);
     }
 }
 
@@ -38,7 +37,7 @@ void GameObject::Render()
 {
     for (int pos = 0; pos < (int)components.size(); pos++)
     {
-        components[pos].get()->Render();
+        components[pos]->Render();
     }
 }
 

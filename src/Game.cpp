@@ -13,6 +13,9 @@
 
 Game::Game(std::string title, int width, int height)
 {
+    frameStart = 0;
+    dt = 0;
+    CalculateDeltaTime();
     // Randomize penguin appearence
     srand(time(NULL));
     SDL_Log("Starting game");
@@ -133,7 +136,9 @@ void Game::Run()
 {
     while (!state->QuitRequested())
     {
-        state->Update(0);
+        CalculateDeltaTime();
+        InputManager::GetInstance().Update();
+        state->Update(GetDeltaTime());
         state->Render();
         SDL_RenderPresent(renderer);
         SDL_Delay(33);
@@ -141,4 +146,16 @@ void Game::Run()
     Resources::ClearImages();
     Resources::ClearMusics();
     Resources::ClearSounds();
+}
+
+void Game::CalculateDeltaTime()
+{
+    int previousFrame = frameStart;
+    frameStart = SDL_GetTicks();
+    dt = (frameStart - previousFrame) / 1000.0;
+}
+
+float Game::GetDeltaTime()
+{
+    return dt;
 }

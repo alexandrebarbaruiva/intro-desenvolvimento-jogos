@@ -22,6 +22,9 @@
 #include "Face.h"
 #include "TileSet.h"
 #include "TileMap.h"
+#include "InputManager.h"
+#include "Camera.h"
+#include "CameraFollower.h"
 
 class State
 {

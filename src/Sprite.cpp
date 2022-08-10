@@ -79,7 +79,11 @@ void Sprite::Render(int x, int y, int w, int h)
 
 void Sprite::Render()
 {
-    this->Render(associated.box.x, associated.box.y, associated.box.w, associated.box.h);
+    this->Render(
+        associated.box.x - Camera::pos.x,
+        associated.box.y - Camera::pos.y,
+        associated.box.w,
+        associated.box.h);
 }
 
 int Sprite::GetWidth()
@@ -94,11 +98,7 @@ int Sprite::GetHeight()
 
 bool Sprite::IsOpen()
 {
-    if (texture != nullptr)
-    {
-        return true;
-    }
-    return false;
+    return (texture != nullptr);
 }
 
 void Sprite::Update(float dt)

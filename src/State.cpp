@@ -9,6 +9,9 @@
  *
  */
 #include "../include/State.h"
+#include <math.h>
+
+const double PI = M_PI;
 
 State::State()
 {
@@ -17,7 +20,10 @@ State::State()
     GameObject *gameObjectOcean = new GameObject();
 
     Sprite *bg = new Sprite(*gameObjectOcean, "assets/img/ocean.jpg");
+    CameraFollower *OceanFollower = new CameraFollower(*gameObjectOcean);
     gameObjectOcean->AddComponent(bg);
+    gameObjectOcean->AddComponent(OceanFollower);
+
     objectArray.emplace_back(gameObjectOcean);
 
     GameObject *gameObjectMap = new GameObject();
@@ -27,6 +33,7 @@ State::State()
     gameObjectMap->AddComponent(tileMap);
     gameObjectMap->box.x = 0;
     gameObjectMap->box.y = 0;
+
     objectArray.emplace_back(gameObjectMap);
 
     music = new Music("assets/audio/stageState.ogg");
@@ -45,7 +52,9 @@ void State::LoadAssets()
 
 void State::Update(float dt)
 {
-    Input();
+    Camera::Update(dt);
+    InputManager instance = InputManager::GetInstance();
+
     for (int pos = 0; pos < (int)objectArray.size(); pos++)
     {
         objectArray[pos].get()->Update(dt);
@@ -57,6 +66,15 @@ void State::Update(float dt)
         {
             objectArray.erase(objectArray.begin() + pos);
         }
+    }
+    if (instance.IsKeyDown(CTRL_KEY))
+    {
+        Vec2 objPos = Vec2(200, 0).GetRotated(-M_PI + M_PI * (rand() % 1001) / 500.0) + Vec2(instance.GetMouseX(), instance.GetMouseY());
+        AddObject((int)objPos.x, (int)objPos.y);
+    }
+    if (instance.IsKeyDown(ESCAPE_KEY) || instance.QuitRequested())
+    {
+        quitRequested = true;
     }
     // Updates entities' state
     if (QuitRequested())
@@ -87,8 +105,8 @@ void State::AddObject(int mouseX, int mouseY)
     firstEnemy->AddComponent(penguinFace);
 
     // Add position to centralize image
-    firstEnemy->box.x = mouseX - firstEnemy->box.Center().x;
-    firstEnemy->box.y = mouseY - firstEnemy->box.Center().y;
+    firstEnemy->box.x = mouseX + Camera::pos.x - firstEnemy->box.Center().x;
+    firstEnemy->box.y = mouseY + Camera::pos.y - firstEnemy->box.Center().y;
 
     // Add sound
     Sound *penguinSound = new Sound(*firstEnemy, "assets/audio/boom.wav");

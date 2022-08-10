@@ -39,6 +39,16 @@ void Face::Damage(int damage)
 
 void Face::Update(float dt)
 {
+    InputManager instance = InputManager::GetInstance();
+    bool clicked = instance.MousePress(LEFT_MOUSE_BUTTON);
+    bool containsFace = associated.box.Contains(
+        Vec2(
+            (instance.GetMouseX() + Camera::pos.x),
+            (instance.GetMouseY() + Camera::pos.y)));
+    if (clicked && containsFace)
+    {
+        Damage(std::rand() % 10 + 10);
+    }
 }
 
 void Face::Render()
