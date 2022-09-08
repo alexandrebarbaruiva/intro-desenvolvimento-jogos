@@ -13,6 +13,18 @@
 
 Rect::Rect(/* args */)
 {
+    this->x = 0;
+    this->y = 0;
+    this->w = 0;
+    this->h = 0;
+}
+
+Rect::Rect(float x, float y, float w, float h)
+{
+    this->x = x;
+    this->y = y;
+    this->w = w;
+    this->h = h;
 }
 
 Rect::~Rect()
@@ -28,5 +40,38 @@ bool Rect::Contains(Vec2 vector)
 
 Vec2 Rect::Center()
 {
-    return Vec2(((x + w) / 2), ((y + h) / 2));
+    return Vec2((this->x + this->w / 2), (this->y + this->h / 2));
+}
+
+Vec2 Rect::toVec2()
+{
+    return Vec2(this->x, this->y);
+}
+
+Vec2 Rect::measures()
+{
+    return Vec2(this->w, this->h);
+}
+
+void Rect::setPosition(Vec2 vector) {
+    this->x = vector.x;
+    this->y = vector.y;
+}
+
+Rect Rect::operator+(Vec2 const &vector)
+{
+    float newX = this->x + vector.x;
+    float newY = this->y + vector.y;
+    Rect newRect = Rect(
+        newX,
+        newY,
+        this->w,
+        this->h);
+    return newRect;
+}
+
+Rect Rect::operator+=(Vec2 const &vector)
+{
+    *this = *this + vector;
+    return *this;
 }

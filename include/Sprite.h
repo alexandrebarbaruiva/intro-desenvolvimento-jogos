@@ -16,6 +16,7 @@
 #include "Component.h"
 #include "Resources.h"
 #include "Camera.h"
+#include "Vec2.h"
 #include <string>
 
 class Sprite : public Component
@@ -25,6 +26,7 @@ private:
     int width;
     int height;
     SDL_Rect clipRect;
+    Vec2 scale;
 
 public:
     Sprite(GameObject &associated);
@@ -36,8 +38,12 @@ public:
     void SetClip(int x, int y, int w, int h);
     void Render(int x, int y, int w, int h);
     void Render();
+
     int GetWidth();
     int GetHeight();
+    void SetScale(float scaleX, float scaleY);
+    Vec2 GetScale();
+
     bool IsOpen();
 
     void Update(float dt);

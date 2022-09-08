@@ -15,6 +15,8 @@
 #include "SDL_include.h"
 #include <string>
 #include "State.h"
+#define GAME_SCREEN_WIDTH 1024
+#define GAME_SCREEN_HEIGHT 600
 
 // Game class using the Singleton's design pattern, which allows
 // only one instance to exist at any given moment. For that to be

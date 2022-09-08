@@ -14,11 +14,13 @@
 Sprite::Sprite(GameObject &associated) : Component(associated)
 {
     texture = nullptr;
+    this->scale = Vec2(1, 1);
 }
 
 Sprite::Sprite(GameObject &associated, std::string file) : Sprite(associated)
 {
     texture = nullptr;
+    this->scale = Vec2(1, 1);
     Open(file);
 }
 
@@ -44,8 +46,6 @@ void Sprite::Open(std::string file)
         SDL_LogError(0, "Unable to query texture: %s", IMG_GetError());
     }
     SetClip(0, 0, width, height);
-    associated.box.x = 0;
-    associated.box.y = 0;
     associated.box.w = width;
     associated.box.h = height;
 }
@@ -63,15 +63,17 @@ void Sprite::Render(int x, int y, int w, int h)
     SDL_Rect dst;
     dst.x = x;
     dst.y = y;
-    dst.w = w;
-    dst.h = h;
+    dst.w = w * this->scale.x;
+    dst.h = h * this->scale.y;
 
-    if (SDL_RenderCopy(
+    if (SDL_RenderCopyEx(
             Game::GetInstance()->GetRenderer(), // renderer
             texture,                            // texture
             &clipRect,                          // source rect
-            &dst                                // destination rect
-            ))
+            &dst,                               // destination rect
+            associated.angleDeg,
+            nullptr,
+            SDL_FLIP_NONE))
     {
         SDL_LogError(0, "Unable to render sprite: %s", IMG_GetError());
     }
@@ -88,12 +90,31 @@ void Sprite::Render()
 
 int Sprite::GetWidth()
 {
-    return width;
+    return width * this->scale.x;
 }
 
 int Sprite::GetHeight()
 {
-    return height;
+    return height * this->scale.y;
+}
+
+void Sprite::SetScale(float scaleX, float scaleY)
+{
+    if (scaleX == 0)
+    {
+        scaleX = this->scale.x;
+    }
+    if (scaleY == 0)
+    {
+        scaleY = this->scale.y;
+    }
+
+    this->scale = Vec2(scaleX, scaleX);
+}
+
+Vec2 Sprite::GetScale()
+{
+    return this->scale;
 }
 
 bool Sprite::IsOpen()

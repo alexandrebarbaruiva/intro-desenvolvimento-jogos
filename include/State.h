@@ -19,7 +19,7 @@
 #include "Music.h"
 #include "Sound.h"
 #include "GameObject.h"
-#include "Face.h"
+#include "Alien.h"
 #include "TileSet.h"
 #include "TileMap.h"
 #include "InputManager.h"
@@ -30,15 +30,18 @@ class State
 {
 private:
     Music *music;
+    bool started;
     bool quitRequested;
-    std::vector<std::unique_ptr<GameObject>> objectArray;
+    std::vector<std::shared_ptr<GameObject>> objectArray;
 
 public:
     State();
     ~State();
 
+    void Start();
     void Input();
-    void AddObject(int mouseX, int mouseY);
+    std::weak_ptr<GameObject> AddObject(GameObject* go);
+    std::weak_ptr<GameObject> GetObject(GameObject* go);
     bool QuitRequested();
     void LoadAssets();
     void Update(float dt);

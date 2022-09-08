@@ -41,6 +41,14 @@ Vec2 Vec2::operator+(Vec2 const &vector)
     return newVector;
 }
 
+Vec2 Vec2::operator-(Vec2 const &vector)
+{
+    Vec2 newVector = Vec2(0, 0);
+    newVector.x = this->x - vector.x;
+    newVector.y = this->y - vector.y;
+    return newVector;
+}
+
 Vec2 Vec2::operator+=(Vec2 const &vector)
 {
     *this = *this + vector;
@@ -53,4 +61,42 @@ Vec2 Vec2::operator*(float value)
     newVector.x = this->x * value;
     newVector.y = this->y * value;
     return newVector;
+}
+
+Vec2 Vec2::operator/(float value)
+{
+    Vec2 newVector = Vec2(0, 0);
+    if (value != 0.0)
+    {
+        newVector.x = this->x / value;
+        newVector.y = this->y / value;
+    }
+    return newVector;
+}
+
+float Vec2::atan() {
+    return atan2(this->y, this->x);
+}
+
+float Vec2::direct(Vec2 &vector) {
+    Vec2 result = (vector - *this);
+    return -atan2(result.y, result.x);
+}
+
+Vec2 Vec2::normalize()
+{
+    float mag = this->magnitude();
+    return Vec2(
+        (this->x / mag),
+        (this->y / mag));
+}
+
+float Vec2::magnitude()
+{
+    return sqrt((pow(this->x, 2)) + (pow(this->y, 2)));
+}
+
+float Vec2::distanceTo(Vec2 &vector)
+{
+    return (*this - vector).magnitude();
 }

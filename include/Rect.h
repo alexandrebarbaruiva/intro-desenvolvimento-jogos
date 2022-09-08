@@ -21,6 +21,7 @@ private:
     /* data */
 public:
     Rect(/* args */);
+    Rect(float x, float y, float w, float h);
     ~Rect();
     float x;
     float y;
@@ -28,6 +29,11 @@ public:
     float h;
     bool Contains(Vec2 vector);
     Vec2 Center();
+    Vec2 toVec2();
+    Vec2 measures();
+    void setPosition(Vec2 vector);
+    Rect operator+(Vec2 const &vector);
+    Rect operator+=(Vec2 const &vector);
 };
 
 #endif

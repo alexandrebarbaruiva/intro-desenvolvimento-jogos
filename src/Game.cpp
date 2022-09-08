@@ -127,13 +127,14 @@ Game *Game::GetInstance()
 {
     if (instance == nullptr)
     {
-        new Game("Alexandre Augusto de Sá dos Santos 15/00156940", 1024, 600);
+        new Game("Alexandre Augusto de Sá dos Santos 15/00156940", GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT);
     }
     return instance;
 }
 
 void Game::Run()
 {
+    state->Start();
     while (!state->QuitRequested())
     {
         CalculateDeltaTime();

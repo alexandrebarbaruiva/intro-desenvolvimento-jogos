@@ -9,6 +9,7 @@
  *
  */
 #include "../include/Camera.h"
+#include "../include/Game.h"
 #include "../include/InputManager.h"
 
 GameObject *Camera::focus;
@@ -31,7 +32,8 @@ void Camera::Update(float dt)
     speed = Vec2();
     if (focus != nullptr)
     {
-        pos = focus->box.Center();
+        // Screen is 1024 x 600
+        pos = focus->box.Center() - Vec2(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT / 2);
     }
     else
     {

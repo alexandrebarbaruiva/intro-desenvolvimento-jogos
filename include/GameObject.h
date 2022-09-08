@@ -25,13 +25,17 @@ class GameObject
 {
 private:
     std::vector<std::unique_ptr<Component>> components;
+    bool started;
     bool isDead;
 
 public:
     Rect box;
+    double angleDeg;
 
     GameObject(/* args */);
     ~GameObject();
+
+    void Start();
 
     void Update(float dt);
     void Render();

@@ -29,8 +29,18 @@ public:
     Vec2 GetRotated(float rotation);
 
     Vec2 operator+(Vec2 const &vector);
+    Vec2 operator-(Vec2 const &vector);
     Vec2 operator+=(Vec2 const &vector);
     Vec2 operator*(float value);
+    Vec2 operator/(float value);
+    float atan();
+
+    Vec2 normalize();
+    float magnitude();
+    float direct(Vec2 &vector);
+
+    float distanceTo(Vec2 &vector);
+
 };
 
 #endif

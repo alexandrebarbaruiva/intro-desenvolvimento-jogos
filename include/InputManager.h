@@ -20,6 +20,7 @@
 #define SPACE_KEY SDLK_SPACE
 #define CTRL_KEY SDLK_LCTRL
 #define LEFT_MOUSE_BUTTON SDL_BUTTON_LEFT
+#define RIGHT_MOUSE_BUTTON SDL_BUTTON_RIGHT
 #include "SDL_include.h"
 #include <unordered_map>
 #include <string>
