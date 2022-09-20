@@ -11,17 +11,17 @@
 #include <iostream>
 #include "../include/Bullet.h"
 
-Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, float maxDistance, std::string sprite) : Component(associated)
+Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, float maxDistance, std::string sprite, int frameCount, int frameTime) : Component(associated)
 {
-    Sprite *spriteObj = new Sprite(associated, sprite);
+    Sprite *spriteObj = new Sprite(associated, sprite, frameCount, 0.15);
     associated.AddComponent(spriteObj);
     this->speed = Vec2(1, 0).GetRotated(angle) * speed;
     this->distanceLeft = maxDistance;
     this->damage = damage;
 }
 
-void Bullet::Start() {
-    
+void Bullet::Start()
+{
 }
 
 void Bullet::Update(float dt)

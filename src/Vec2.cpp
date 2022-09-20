@@ -55,6 +55,12 @@ Vec2 Vec2::operator+=(Vec2 const &vector)
     return *this;
 }
 
+Vec2 Vec2::operator-=(Vec2 const &vector)
+{
+    *this = *this - vector;
+    return *this;
+}
+
 Vec2 Vec2::operator*(float value)
 {
     Vec2 newVector = Vec2(0, 0);

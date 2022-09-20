@@ -15,12 +15,20 @@ Sprite::Sprite(GameObject &associated) : Component(associated)
 {
     texture = nullptr;
     this->scale = Vec2(1, 1);
+    this->frameCount = 1;
+    this->frameTime = 1;
+    this->currentFrame = 0;
+    this->timeElapsed = 0;
 }
 
-Sprite::Sprite(GameObject &associated, std::string file) : Sprite(associated)
+Sprite::Sprite(GameObject &associated, std::string file, int frameCount, float frameTime) : Sprite(associated)
 {
     texture = nullptr;
     this->scale = Vec2(1, 1);
+    this->frameTime = frameTime;
+    this->frameCount = frameCount;
+    this->currentFrame = 0;
+    this->timeElapsed = 0;
     Open(file);
 }
 
@@ -45,8 +53,12 @@ void Sprite::Open(std::string file)
     {
         SDL_LogError(0, "Unable to query texture: %s", IMG_GetError());
     }
-    SetClip(0, 0, width, height);
-    associated.box.w = width;
+    SetClip(
+        0,
+        0,
+        width / frameCount,
+        height);
+    associated.box.w = width / frameCount;
     associated.box.h = height;
 }
 
@@ -88,9 +100,38 @@ void Sprite::Render()
         associated.box.h);
 }
 
+void Sprite::SetFrame(int frame)
+{
+    this->currentFrame = frame;
+    this->timeElapsed = 0;
+    int newXFrame = this->width * this->currentFrame / frameCount;
+    int newYFrame = 0;
+    int newWFrame = this->width / frameCount;
+    int newHFrame = this->height;
+
+    Sprite::SetClip(
+        newXFrame,
+        newYFrame,
+        newWFrame,
+        newHFrame);
+}
+
+void Sprite::SetFrameCount(int frameCount)
+{
+    this->frameCount = frameCount;
+    Sprite::SetFrame(0);
+    associated.box.w = GetWidth();
+}
+
+void Sprite::SetFrameTime(int frameTime)
+{
+    this->frameTime = frameTime;
+    this->timeElapsed = 0;
+}
+
 int Sprite::GetWidth()
 {
-    return width * this->scale.x;
+    return width * this->scale.x / frameCount;
 }
 
 int Sprite::GetHeight()
@@ -124,6 +165,22 @@ bool Sprite::IsOpen()
 
 void Sprite::Update(float dt)
 {
+    timeElapsed += dt;
+    if (timeElapsed >= frameTime)
+    {
+        if (currentFrame < frameCount)
+        {
+            // Cycle through all frames
+            Sprite::SetFrame(currentFrame + 1);
+        }
+        else
+        {
+            // Go back to first frame
+            Sprite::SetFrame(0);
+        }
+    }
+
+    currentFrame += 1;
 }
 
 bool Sprite::Is(std::string type)

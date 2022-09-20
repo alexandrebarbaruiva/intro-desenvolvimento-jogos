@@ -20,6 +20,7 @@
 #include "Sound.h"
 #include "GameObject.h"
 #include "Alien.h"
+#include "PenguinBody.h"
 #include "TileSet.h"
 #include "TileMap.h"
 #include "InputManager.h"

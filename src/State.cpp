@@ -23,35 +23,48 @@ State::State()
 
     GameObject *gameObjectOcean = new GameObject();
 
+    // Background
     Sprite *bg = new Sprite(*gameObjectOcean, "assets/img/ocean.jpg");
     CameraFollower *OceanFollower = new CameraFollower(*gameObjectOcean);
     gameObjectOcean->AddComponent(bg);
     gameObjectOcean->AddComponent(OceanFollower);
 
-    objectArray.emplace_back(gameObjectOcean);
+    State::AddObject(gameObjectOcean);
 
     GameObject *gameObjectMap = new GameObject();
 
+    // Map 
     TileSet *tileSet = new TileSet(64, 64, "assets/img/tileset.png");
     TileMap *tileMap = new TileMap(*gameObjectMap, "assets/map/tileMap.txt", tileSet);
     gameObjectMap->AddComponent(tileMap);
     gameObjectMap->box.setPosition(Vec2(0, 0));
 
-    objectArray.emplace_back(gameObjectMap);
+    State::AddObject(gameObjectMap);
 
+    // Alien 
     GameObject *gameObjectAlien = new GameObject();
     Alien *alien = new Alien(*gameObjectAlien, 3);
 
     gameObjectAlien->AddComponent(alien);
     gameObjectAlien->box.setPosition((Vec2(GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT) - gameObjectAlien->box.measures())/2);
 
-    objectArray.emplace_back(gameObjectAlien);
+    State::AddObject(gameObjectAlien);
 
-    Camera::Follow(gameObjectAlien);
+    // Penguin Player
+    GameObject *gameObjectPenguin = new GameObject();
+    PenguinBody *penguin = new PenguinBody(*gameObjectPenguin);
+
+    gameObjectPenguin->AddComponent(penguin);
+    gameObjectPenguin->box.setPosition({704, 640});
+
+    State::AddObject(gameObjectPenguin);
+
+    Camera::Follow(gameObjectPenguin);
 
     music = new Music("assets/audio/stageState.ogg");
     music->Play();
     started = true;
+    std::cout << "got here H\n";
 }
 
 State::~State()
@@ -61,10 +74,9 @@ State::~State()
 
 void State::Start()
 {
-    for (auto object : objectArray)
-    {
-        object->Start();
-    }
+    for(int i = 0; i < (int) objectArray.size(); i++){
+		objectArray[i]->Start();
+	}
     started = true;
 }
 
@@ -90,17 +102,13 @@ void State::Update(float dt)
             objectArray.erase(objectArray.begin() + pos);
         }
     }
-    // Create penguim
-    // if (instance.IsKeyDown(SPACE_KEY))
-    // {
-    //     Vec2 objPos = Vec2(200, 0).GetRotated(-M_PI + M_PI * (rand() % 1001) / 500.0) + Vec2(instance.GetMouseX(), instance.GetMouseY());
-    //     AddObject((int)objPos.x, (int)objPos.y);
-    // }
+
     // Quits game
     if (instance.IsKeyDown(ESCAPE_KEY) || instance.QuitRequested())
     {
         quitRequested = true;
     }
+
     // Updates entities' state
     if (QuitRequested())
     {
@@ -112,7 +120,7 @@ void State::Render()
 {
     for (int pos = 0; pos < (int)objectArray.size(); pos++)
     {
-        objectArray[pos].get()->Render();
+        objectArray[pos]->Render();
     }
 }
 

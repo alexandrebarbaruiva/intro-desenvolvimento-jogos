@@ -76,12 +76,14 @@ void Minion::Shoot(Vec2 target)
     gameObject->angleDeg = -180 * bulletAngle / M_PI;
 
     Bullet *bullet = new Bullet(
-        *gameObject,                     // GameObject
-        bulletAngle,                     // angle
-        400,                             // speed
-        10,                              // damage
-        1000,                            // maxDistance
-        "./assets/img/minionbullet1.png" // sprite
+        *gameObject,                      // GameObject
+        bulletAngle,                      // angle
+        400,                              // speed
+        10,                               // damage
+        1000,                             // maxDistance
+        "./assets/img/minionbullet2.png", // sprite
+        3,                                // frameCount
+        1                                 // frameTime
     );
     gameObject->AddComponent(bullet);
 

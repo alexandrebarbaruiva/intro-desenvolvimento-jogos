@@ -31,6 +31,7 @@ public:
     Vec2 operator+(Vec2 const &vector);
     Vec2 operator-(Vec2 const &vector);
     Vec2 operator+=(Vec2 const &vector);
+    Vec2 operator-=(Vec2 const &vector);
     Vec2 operator*(float value);
     Vec2 operator/(float value);
     float atan();
@@ -40,6 +41,7 @@ public:
     float direct(Vec2 &vector);
 
     float distanceTo(Vec2 &vector);
+
 
 };
 
