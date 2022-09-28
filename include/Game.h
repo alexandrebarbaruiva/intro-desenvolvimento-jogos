@@ -10,11 +10,19 @@
  */
 #ifndef GAME_HEADER
 #define GAME_HEADER
+#define INCLUDE_SDL
 #define INCLUDE_SDL_IMAGE
 #define INCLUDE_SDL_MIXER
 #include "SDL_include.h"
-#include <string>
 #include "State.h"
+#include "InputManager.h"
+#include "Resources.h"
+#include <stack>
+#include <ctime>
+#include <iostream>
+#define ALIEN_HP 100
+#define PENGUIN_HP 100
+#define HEALTH_BOX 20
 #define GAME_SCREEN_WIDTH 1024
 #define GAME_SCREEN_HEIGHT 600
 
@@ -27,7 +35,6 @@ class Game
     // As a singleton, it's constructor must be defined as private to
     // enforce the single instance directive.
 private:
-    /* data */
     static Game *instance;
     std::string windowTitle;
 
@@ -35,21 +42,18 @@ private:
     int SDL_Image_Flags = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF;
     int SDL_Mix_Flags = MIX_INIT_FLAC | MIX_INIT_MP3 | MIX_INIT_OGG;
 
-    SDL_Window *window;
-    SDL_Renderer *renderer;
-    State *state;
-
-protected:
     Game(std::string title, int width, int height);
 
-public:
+    SDL_Window *window;
+    SDL_Renderer *renderer;
+    static State *storedState;
+    static std::stack<std::unique_ptr<State>> stateStack;
     int frameStart;
     float dt;
-    // Singleton must not be cloneable nor assignable
-    Game(Game &other) = delete;
-    void operator=(const Game &) = delete;
-    ~Game();
+    void CalculateDeltaTime();
 
+public:
+    ~Game();
     // Game loop
     // 1. Load screens
     // 2. Input data is processed
@@ -60,22 +64,16 @@ public:
     // Method for controlling access to the single instance.
     // First run it creates the instance, after that it
     // returns the existing instance
-    static Game *GetInstance();
+    static Game &GetInstance();
 
     // Method for getting game Renderer
     SDL_Renderer *GetRenderer();
 
     // Method for getting current game State
-    State &GetState();
+    State &GetCurrentState();
 
-    std::string getTitle();
-
-    void CalculateDeltaTime();
+    void Push(State *state);
     float GetDeltaTime();
 };
-#endif
 
-// Links:
-// https://www.geeksforgeeks.org/pointers-vs-references-cpp/
-// https://stackoverflow.com/questions/1008019/c-singleton-design-pattern
-// https://stackoverflow.com/questions/3246803/why-use-ifndef-class-h-and-define-class-h-in-h-file-but-not-in-cpp
+#endif

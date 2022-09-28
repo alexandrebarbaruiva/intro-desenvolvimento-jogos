@@ -10,13 +10,8 @@
  */
 #ifndef CAMERA_HEADER
 #define CAMERA_HEADER
-#define INCLUDE_SDL_IMAGE
-#define INCLUDE_SDL_MIXER
-#include "SDL_include.h"
 #include "GameObject.h"
 #include "Vec2.h"
-#include "InputManager.h"
-#include <string>
 
 class Camera
 {
@@ -30,6 +25,7 @@ public:
     static void Follow(GameObject *newFocus);
     static void Unfollow();
     static void Update(float dt);
+    static void Reset();
 };
 
 #endif

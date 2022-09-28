@@ -1,7 +1,7 @@
 /**
- * @file Penguin.h
+ * @file PenguinBody.h
  * @author Alexandre Augusto de Sá dos Santos (150056940@aluno.unb.br)
- * @brief Penguin class header file
+ * @brief PenguinBody class header file
  * @version 0.1
  * @date 2022-09-10
  *
@@ -10,16 +10,18 @@
  */
 #ifndef PENGUINBODY_HEADER
 #define PENGUINBODY_HEADER
-#define INCLUDE_SDL_IMAGE
-#define INCLUDE_SDL_MIXER
-#include "SDL_include.h"
 #include "Component.h"
+#include "GameObject.h"
+#include "PenguinCannon.h"
 #include "Sprite.h"
-#include "Vec2.h"
+#include "Collider.h"
+#include "Text.h"
+#include "Game.h"
+#include "Camera.h"
+#include "Bullet.h"
+#include "Timer.h"
+#include "Sound.h"
 #include <vector>
-#include <cmath>
-#include <queue>
-#include <string>
 
 class PenguinBody : public Component
 {
@@ -28,11 +30,11 @@ private:
     Vec2 speed;
     float linearSpeed;
     float angle;
-    int hp;
 
 public:
     static PenguinBody *player;
     std::string type = "PenguinBody";
+    int hp;
 
     PenguinBody(GameObject &associated);
     ~PenguinBody();
@@ -41,6 +43,7 @@ public:
     void Update(float dt);
     void Render();
     bool Is(std::string type);
+    void NotifyCollision(GameObject &other);
 };
 
 #endif

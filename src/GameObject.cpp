@@ -3,27 +3,23 @@
  * @author Alexandre Augusto de Sá dos Santos (150056940@aluno.unb.br)
  * @brief GameObject class implementation file
  * @version 0.1
- * @date 2022-07-01
+ * @date 2022-06-26
  *
  * @copyright Copyright (c) 2022
  *
  */
-#include <iostream>
-#include "../include/GameObject.h"
+#include "GameObject.h"
+#include "Component.h"
 
 GameObject::GameObject()
 {
-    isDead = false;
-    started = false;
-    angleDeg = 0;
+    this->started = false;
+    this->angleDeg = 0;
+    this->isDead = false;
 }
 
 GameObject::~GameObject()
 {
-    for (auto cpt = components.end(); cpt > components.begin(); cpt--)
-    {
-        components.erase(cpt);
-    }
     components.clear();
 }
 
@@ -78,14 +74,12 @@ void GameObject::RemoveComponent(Component *cpt)
         if (components[pos].get() == cpt)
         {
             components.erase(components.begin() + pos);
-            break;
         }
     }
 }
 
 Component *GameObject::GetComponent(std::string type)
 {
-    // Assuming there's only one Component of type
     for (int pos = 0; pos < (int)components.size(); pos++)
     {
         if (components[pos].get()->Is(type))
@@ -96,6 +90,10 @@ Component *GameObject::GetComponent(std::string type)
     return nullptr;
 }
 
-// Links
-// https://www.geeksforgeeks.org/vector-in-cpp-stl/
-// https://www.geeksforgeeks.org/vector-erase-and-clear-in-cpp/
+void GameObject::NotifyCollision(GameObject &other)
+{
+    for (int pos = 0; pos < (int)components.size(); pos++)
+    {
+        components[pos]->NotifyCollision(other);
+    }
+}

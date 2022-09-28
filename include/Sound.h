@@ -10,18 +10,18 @@
  */
 #ifndef SOUND_HEADER
 #define SOUND_HEADER
-#define INCLUDE_SDL_IMAGE
 #define INCLUDE_SDL_MIXER
+#define INCLUDE_SDL
 #include "SDL_include.h"
 #include "GameObject.h"
-#include "Resources.h"
 #include "Component.h"
 #include <string>
+#include <memory>
 
 class Sound : public Component
 {
 private:
-    Mix_Chunk *chunk;
+    std::shared_ptr<Mix_Chunk> chunk;
     int channel;
 
 public:
@@ -38,6 +38,7 @@ public:
     void Update(float dt);
     void Render();
     bool Is(std::string type);
+    void NotifyCollision(GameObject &other);
 };
 
 #endif

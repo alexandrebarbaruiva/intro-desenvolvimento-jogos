@@ -11,12 +11,8 @@
 #ifndef BULLET_HEADER
 #define BULLET_HEADER
 #include "Component.h"
-#include "GameObject.h"
 #include "Sprite.h"
-#include "Vec2.h"
-#include <vector>
-#include <cmath>
-#include <string>
+#include "Collider.h"
 
 class Bullet : public Component
 {
@@ -26,15 +22,18 @@ private:
     int damage;
 
 public:
-    Bullet(GameObject &associated, float angle, float speed, int damage, float maxDistance, std::string sprite, int frameCount, int frameTime);
-
+    Bullet(GameObject &associated, float angle, float speed, int damage, float maxDistance, std::string sprite, float frameTime, int frameCount, bool targetsPlayer);
+    
     std::string type = "Bullet";
-
-    void Start();
+    bool targetsPlayer;
+    
     void Update(float dt);
     void Render();
     bool Is(std::string type);
     int GetDamage();
+    void NotifyCollision(GameObject &other);
+
+    
 };
 
 #endif

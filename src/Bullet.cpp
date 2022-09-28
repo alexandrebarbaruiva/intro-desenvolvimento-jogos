@@ -8,27 +8,24 @@
  * @copyright Copyright (c) 2022
  *
  */
-#include <iostream>
-#include "../include/Bullet.h"
+#include "Bullet.h"
 
-Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, float maxDistance, std::string sprite, int frameCount, int frameTime) : Component(associated)
+Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, float maxDistance, std::string sprite, float frameTime, int frameCount, bool targetsPlayer) : Component(associated)
 {
-    Sprite *spriteObj = new Sprite(associated, sprite, frameCount, 0.15);
-    associated.AddComponent(spriteObj);
-    this->speed = Vec2(1, 0).GetRotated(angle) * speed;
+    associated.AddComponent(new Sprite(associated, sprite, frameCount, frameTime));
+    associated.AddComponent(new Collider(associated));
+
+    this->speed = Vec2::Rotate(Vec2(speed, 0), angle);
     this->distanceLeft = maxDistance;
     this->damage = damage;
-}
-
-void Bullet::Start()
-{
+    this->targetsPlayer = targetsPlayer;
 }
 
 void Bullet::Update(float dt)
 {
-    associated.box += (speed * dt);
-    distanceLeft -= (speed * dt).magnitude();
-    if (distanceLeft <= 0)
+    associated.box = associated.box + speed * dt;
+    this->distanceLeft -= Vec2::Mag(speed * dt);
+    if (this->distanceLeft <= 0)
     {
         associated.RequestDelete();
     }
@@ -36,6 +33,14 @@ void Bullet::Update(float dt)
 
 void Bullet::Render()
 {
+}
+
+void Bullet::NotifyCollision(GameObject &other)
+{
+    if ((this->targetsPlayer && other.GetComponent("PenguinBody") != nullptr) || (!this->targetsPlayer && other.GetComponent("Alien") != nullptr))
+    {
+        associated.RequestDelete();
+    }
 }
 
 bool Bullet::Is(std::string type)

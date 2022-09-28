@@ -8,17 +8,20 @@
  * @copyright Copyright (c) 2022
  *
  */
-#include <iostream>
-#include "../include/Game.h"
+#include "Game.h"
 
-Game::Game(std::string title, int width, int height)
+Game *Game::instance;
+std::stack<std::unique_ptr<State>> Game::stateStack;
+State *Game::storedState;
+
+Game::Game(std::string title, int width, int height) : frameStart(0), dt(0)
 {
-    frameStart = 0;
-    dt = 0;
-    CalculateDeltaTime();
-    // Randomize penguin appearence
+    this->frameStart = 0;
+    this->dt = 0;
+
     srand(time(NULL));
     SDL_Log("Starting game");
+
     if (instance != nullptr)
     {
         std::cout << "Game is not obeying Singleton laws" << std::endl;
@@ -26,7 +29,7 @@ Game::Game(std::string title, int width, int height)
 
     instance = this;
 
-    // Check for any SDL initialization error
+    // Initialization of basic SDL functionalities
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0)
     {
         SDL_LogError(0, "Unable to initialize SDL: %s", SDL_GetError());
@@ -40,7 +43,7 @@ Game::Game(std::string title, int width, int height)
         throw "Unable to initialize SDL_Image";
     }
 
-    // Check for any Audio initialization error
+    // Check for any Image initialization error
     if (Mix_Init(SDL_Mix_Flags) == 0)
     {
         SDL_LogError(0, "Unable to initialize SDL_Mix: %s", Mix_GetError());
@@ -54,11 +57,14 @@ Game::Game(std::string title, int width, int height)
         throw "Unable to initialize Mix_OpenAudio";
     }
 
-    // Changes default 8 audio channels to 32 (might increase if needed by game)
+    if (TTF_Init() != 0)
+    {
+        SDL_LogError(0, "Unable to initialize TTF: %s", SDL_GetError());
+        throw "Unable to initialize TTF";
+    }
+
     Mix_AllocateChannels(32);
 
-    // https://stackoverflow.com/questions/347949/how-to-convert-a-stdstring-to-const-char-or-char
-    // Create Game Window
     window = SDL_CreateWindow(
         title.c_str(),          // window title
         SDL_WINDOWPOS_CENTERED, // initial x position
@@ -67,7 +73,6 @@ Game::Game(std::string title, int width, int height)
         height,                 // height, in pixels
         SDL_Window_Flags        // flags
     );
-    windowTitle = title;
 
     // Check if window has been successfully created
     if (window == nullptr)
@@ -88,75 +93,104 @@ Game::Game(std::string title, int width, int height)
         SDL_LogError(0, "Unable to create Renderer: %s", SDL_GetError());
         throw "Unable to create Renderer";
     }
-
-    state = new State();
+    this->frameStart = SDL_GetTicks();
+    this->storedState = nullptr;
 }
 
 Game::~Game()
 {
-    // Destroys in constructor's reverse order
-    // Renderer -> Window -> Audio -> Mix -> Img -> SDL
+    if (storedState != nullptr)
+    {
+        delete storedState;
+    }
     SDL_Log("Destroying game");
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    TTF_Quit();
     Mix_CloseAudio();
     Mix_Quit();
     IMG_Quit();
     SDL_Quit();
 }
 
-State &Game::GetState()
+State &Game::GetCurrentState()
 {
-    return *state;
+    State *cState = stateStack.top().get();
+    return *cState;
+}
+
+void Game::Push(State *state)
+{
+    this->storedState = state;
 }
 
 SDL_Renderer *Game::GetRenderer()
 {
-    return renderer;
+    return this->renderer;
 }
 
-std::string Game::getTitle()
-{
-    return windowTitle;
-}
-
-Game *Game::instance{nullptr};
-
-// GetInstance makes sure there's only one Game instance
-Game *Game::GetInstance()
+Game &Game::GetInstance()
 {
     if (instance == nullptr)
     {
         new Game("Alexandre Augusto de Sá dos Santos 15/00156940", GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT);
     }
-    return instance;
+
+    return *instance;
 }
 
 void Game::Run()
 {
-    state->Start();
-    while (!state->QuitRequested())
+    stateStack.emplace(storedState);
+    stateStack.top()->Start();
+    storedState = nullptr;
+
+    while (!(stateStack.empty()) && !(stateStack.top()->QuitRequested()))
     {
+        if (stateStack.top()->PopRequested())
+        {
+            stateStack.pop();
+            Resources::ClearImages();
+
+            if (!stateStack.empty())
+            {
+                stateStack.top()->Resume();
+            }
+        }
+
+        if (storedState != nullptr)
+        {
+            stateStack.top()->Pause();
+            stateStack.emplace(storedState);
+            stateStack.top()->Start();
+            storedState = nullptr;
+        }
+
         CalculateDeltaTime();
         InputManager::GetInstance().Update();
-        state->Update(GetDeltaTime());
-        state->Render();
+        stateStack.top()->Update(GetDeltaTime());
+        stateStack.top()->Render();
         SDL_RenderPresent(renderer);
         SDL_Delay(33);
+    }
+
+    while (!stateStack.empty())
+    {
+        stateStack.pop();
     }
     Resources::ClearImages();
     Resources::ClearMusics();
     Resources::ClearSounds();
+    Resources::ClearFonts();
 }
 
 void Game::CalculateDeltaTime()
 {
-    int previousFrame = frameStart;
+    dt = (SDL_GetTicks() - frameStart);
     frameStart = SDL_GetTicks();
-    dt = (frameStart - previousFrame) / 1000.0;
 }
 
 float Game::GetDeltaTime()
 {
-    return dt;
+    return dt / 1000;
 }

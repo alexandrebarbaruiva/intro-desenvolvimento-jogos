@@ -8,19 +8,16 @@
  * @copyright Copyright (c) 2022
  *
  */
-#include "../include/TileMap.h"
+#include "TileMap.h"
+#include "Camera.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>
 
 TileMap::TileMap(GameObject &associated, std::string file, TileSet *tileSet) : Component(associated)
 {
-    this->Load(file);
+    Load(file);
     this->tileSet = tileSet;
-}
-
-TileMap::~TileMap()
-{
 }
 
 void TileMap::Load(std::string file)
@@ -92,8 +89,7 @@ void TileMap::Render()
         RenderLayer(
             layer,
             Camera::pos.x * ((layer * 0.25) + 1),
-            Camera::pos.y * ((layer * 0.25) + 1)
-        );
+            Camera::pos.y * ((layer * 0.25) + 1));
     }
 }
 
@@ -114,9 +110,13 @@ int TileMap::GetDepth()
 
 bool TileMap::Is(std::string type)
 {
-    return (type == "TileMap");
+    return (type == TileMap::type);
 }
 
 void TileMap::Update(float dt)
+{
+}
+
+void TileMap::NotifyCollision(GameObject &other)
 {
 }

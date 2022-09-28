@@ -10,9 +10,6 @@
  */
 #ifndef RECT_HEADER
 #define RECT_HEADER
-#define INCLUDE_SDL_IMAGE
-#define INCLUDE_SDL_MIXER
-#include "SDL_include.h"
 #include "Vec2.h"
 
 class Rect
@@ -22,18 +19,20 @@ private:
 public:
     Rect(/* args */);
     Rect(float x, float y, float w, float h);
-    ~Rect();
+
     float x;
     float y;
     float w;
     float h;
-    bool Contains(Vec2 vector);
+
     Vec2 Center();
-    Vec2 toVec2();
-    Vec2 measures();
-    void setPosition(Vec2 vector);
-    Rect operator+(Vec2 const &vector);
-    Rect operator+=(Vec2 const &vector);
+    Vec2 Origin();
+    Vec2 End();
+    void SetOrigin(Vec2 vector);
+    void SetCenter(Vec2 vector);
+    static float Distance(Rect r1, Rect r2);
+    Rect operator+(const Vec2 &vector) const;
+    Rect operator+=(const Vec2 &vector) const;
 };
 
 #endif

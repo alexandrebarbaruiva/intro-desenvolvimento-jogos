@@ -8,8 +8,11 @@
  * @copyright Copyright (c) 2022
  *
  */
-#include "../include/Music.h"
-#include <iostream>
+#include "Music.h"
+#include "Resources.h"
+
+#define INCLUDE_SDL
+#include "SDL_include.h"
 
 Music::Music(/* args */)
 {
@@ -32,15 +35,11 @@ void Music::Open(std::string file)
 
 void Music::Play(int times)
 {
-    if (music == nullptr)
+    if (Mix_PlayMusic(music.get(), times) == -1)
     {
-        SDL_LogError(0, "No music loaded: %s", SDL_GetError());
+        SDL_Log("Cant play music: %s", SDL_GetError());
     }
-    else
-    {
-        Mix_PlayMusic(music, times);
-        Mix_VolumeMusic(80);
-    }
+    Mix_VolumeMusic(50);
 }
 
 void Music::Stop(int msToStop)
@@ -50,5 +49,5 @@ void Music::Stop(int msToStop)
 
 bool Music::IsOpen()
 {
-    return (music != nullptr);
+    return music != nullptr;
 }

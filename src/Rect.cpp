@@ -8,10 +8,9 @@
  * @copyright Copyright (c) 2022
  *
  */
-#include <iostream>
-#include "../include/Rect.h"
+#include "Rect.h"
 
-Rect::Rect(/* args */)
+Rect::Rect()
 {
     this->x = 0;
     this->y = 0;
@@ -27,51 +26,44 @@ Rect::Rect(float x, float y, float w, float h)
     this->h = h;
 }
 
-Rect::~Rect()
-{
-}
-
-bool Rect::Contains(Vec2 vector)
-{
-    bool vectorInsideX = (vector.x > this->x) && (vector.x < (this->x + this->w));
-    bool vectorInsideY = (vector.y > this->y) && (vector.y < (this->y + this->h));
-    return (vectorInsideX && vectorInsideY);
-}
-
 Vec2 Rect::Center()
 {
     return Vec2((this->x + this->w / 2), (this->y + this->h / 2));
 }
 
-Vec2 Rect::toVec2()
+Vec2 Rect::Origin()
 {
     return Vec2(this->x, this->y);
 }
 
-Vec2 Rect::measures()
+Vec2 Rect::End()
 {
     return Vec2(this->w, this->h);
 }
 
-void Rect::setPosition(Vec2 vector) {
+void Rect::SetOrigin(Vec2 vector)
+{
     this->x = vector.x;
     this->y = vector.y;
 }
 
-Rect Rect::operator+(Vec2 const &vector)
+void Rect::SetCenter(Vec2 vector)
 {
-    float newX = this->x + vector.x;
-    float newY = this->y + vector.y;
-    Rect newRect = Rect(
-        newX,
-        newY,
-        this->w,
-        this->h);
-    return newRect;
+    this->x = vector.x - this->w / 2;
+    this->y = vector.y - this->h / 2;
 }
 
-Rect Rect::operator+=(Vec2 const &vector)
+Rect Rect::operator+(const Vec2 &vector) const
 {
-    *this = *this + vector;
-    return *this;
+    return Rect(this->x + vector.x, this->y + vector.y, this->w, this->h);
+}
+
+Rect Rect::operator+=(const Vec2 &vector) const
+{
+    return *this + vector;
+}
+
+float Rect::Distance(Rect r1, Rect r2)
+{
+    return Vec2::Distance(r1.Center(), r2.Center());
 }

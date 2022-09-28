@@ -8,8 +8,8 @@
  * @copyright Copyright (c) 2022
  *
  */
-#include <iostream>
-#include "../include/Sound.h"
+#include "Sound.h"
+#include "Resources.h"
 
 Sound::Sound(GameObject &associated) : Component(associated)
 {
@@ -27,12 +27,8 @@ Sound::~Sound()
 
 void Sound::Play(int times)
 {
-    channel = Mix_PlayChannel(-1, chunk, times - 1);
-    Mix_VolumeChunk(chunk, 50);
-    if (channel == -1)
-    {
-        SDL_LogError(0, "No sound loaded: %s", Mix_GetError());
-    }
+    channel = Mix_PlayChannel(-1, chunk.get(), times - 1);
+    Mix_VolumeChunk(chunk.get(), 50);
 }
 
 void Sound::Stop()
@@ -48,7 +44,8 @@ void Sound::Open(std::string file)
     chunk = Resources::GetSound(file);
     if (chunk == nullptr)
     {
-        SDL_LogError(0, "Sound couldn't be opened: %s", Mix_GetError());
+        SDL_Log("Cant load sound: %s", SDL_GetError());
+        exit(EXIT_FAILURE);
     }
 }
 
@@ -71,5 +68,9 @@ void Sound::Render()
 
 bool Sound::Is(std::string type)
 {
-    return (type == "Sound");
+    return (type == Sound::type);
+}
+
+void Sound::NotifyCollision(GameObject &other)
+{
 }

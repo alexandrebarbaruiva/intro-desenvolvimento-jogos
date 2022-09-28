@@ -8,15 +8,15 @@
  * @copyright Copyright (c) 2022
  *
  */
-#include "../include/CameraFollower.h"
+#include "CameraFollower.h"
 
-CameraFollower::CameraFollower(GameObject &go) : Component(go)
+CameraFollower::CameraFollower(GameObject &associated) : Component(associated)
 {
 }
 
 void CameraFollower::Update(float dt)
 {
-    associated.box.setPosition(Camera::pos);
+    associated.box.SetOrigin(Camera::pos);
 }
 
 void CameraFollower::Render()
@@ -25,5 +25,9 @@ void CameraFollower::Render()
 
 bool CameraFollower::Is(std::string type)
 {
-    return (type == "CameraFollower");
+    return (type == CameraFollower::type);
+}
+
+void CameraFollower::NotifyCollision(GameObject &other)
+{
 }

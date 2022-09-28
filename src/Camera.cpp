@@ -8,9 +8,9 @@
  * @copyright Copyright (c) 2022
  *
  */
-#include "../include/Camera.h"
-#include "../include/Game.h"
-#include "../include/InputManager.h"
+#include "Camera.h"
+#include "InputManager.h"
+#include "Game.h"
 
 GameObject *Camera::focus;
 Vec2 Camera::pos;
@@ -26,30 +26,34 @@ void Camera::Unfollow()
     focus = nullptr;
 }
 
+void Camera::Reset()
+{
+    Camera::pos = {0, 0};
+}
+
 void Camera::Update(float dt)
 {
-    InputManager instance = InputManager::GetInstance();
-    speed = Vec2();
     if (focus != nullptr)
     {
-        // Screen is 1024 x 600
-        pos = focus->box.Center() - Vec2(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT / 2);
+        pos.x = focus->box.Center().x - GAME_SCREEN_WIDTH / 2;
+        pos.y = focus->box.Center().y - GAME_SCREEN_HEIGHT / 2;
     }
     else
     {
-        if (instance.IsKeyDown(LEFT_ARROW_KEY))
+        InputManager *input = &InputManager::GetInstance();
+        if (input->IsKeyDown(LEFT_ARROW_KEY))
         {
             speed += Vec2(-1, 0);
         }
-        if (instance.IsKeyDown(RIGHT_ARROW_KEY))
+        if (input->IsKeyDown(RIGHT_ARROW_KEY))
         {
             speed += Vec2(1, 0);
         }
-        if (instance.IsKeyDown(UP_ARROW_KEY))
+        if (input->IsKeyDown(UP_ARROW_KEY))
         {
             speed += Vec2(0, -1);
         }
-        if (instance.IsKeyDown(DOWN_ARROW_KEY))
+        if (input->IsKeyDown(DOWN_ARROW_KEY))
         {
             speed += Vec2(0, 1);
         }

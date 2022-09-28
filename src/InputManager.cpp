@@ -8,20 +8,19 @@
  * @copyright Copyright (c) 2022
  *
  */
-#include <iostream>
-#include "../include/InputManager.h"
+#include "InputManager.h"
 
 InputManager::InputManager()
 {
     for (int i = 0; i < 6; i++)
     {
-        mouseUpdate[i] = 0;
-        mouseState[i] = false;
+        this->mouseUpdate[i] = 0;
+        this->mouseState[i] = false;
     }
-    updateCounter = 0;
-    quitRequested = false;
-    mouseX = 0;
-    mouseY = 0;
+    this->updateCounter = 0;
+    this->quitRequested = false;
+    this->mouseX = 0;
+    this->mouseY = 0;
 }
 
 InputManager::~InputManager()
@@ -30,17 +29,18 @@ InputManager::~InputManager()
 
 InputManager &InputManager::GetInstance()
 {
-    // Meyer's Singleton
-    static InputManager instance;
-    return instance;
+    static InputManager inputManager;
+    return inputManager;
 }
 
 void InputManager::Update()
 {
-    updateCounter++;
     SDL_Event event;
+
     SDL_GetMouseState(&mouseX, &mouseY);
     quitRequested = false;
+    updateCounter++;
+
     while (SDL_PollEvent(&event))
     {
         switch (event.type)
@@ -85,59 +85,27 @@ void InputManager::Update()
 
 bool InputManager::KeyPress(int key)
 {
-    std::unordered_map<int, int>::const_iterator foundKey = keyUpdate.find(key);
-    if (foundKey != keyUpdate.end())
-    {
-        if (foundKey->second == updateCounter)
-        {
-            return keyState.find(key)->second;
-        }
-    }
-
-    return false;
+    return keyState[key] == true && keyUpdate[key] == updateCounter;
 }
 
 bool InputManager::KeyRelease(int key)
 {
-    std::unordered_map<int, int>::const_iterator foundKey = keyUpdate.find(key);
-    if (foundKey != keyUpdate.end() && foundKey->second == updateCounter)
-    {
-        std::cout << "key released\n";
-        return !keyState.find(key)->second;
-    }
-
-    return false;
+    return keyState[key] == false && keyUpdate[key] == updateCounter;
 }
 
 bool InputManager::IsKeyDown(int key)
 {
-    std::unordered_map<int, bool>::const_iterator foundKey = keyState.find(key);
-
-    if (foundKey != keyState.end())
-    {
-        return keyState.find(key)->second;
-    }
-
-    return false;
+    return keyState[key];
 }
 
 bool InputManager::MousePress(int button)
 {
-    if (mouseUpdate[button] == updateCounter)
-    {
-        return IsMouseDown(button);
-    }
-
-    return false;
+    return mouseState[button] == true && mouseUpdate[button] == updateCounter;
 }
 
 bool InputManager::MouseRelease(int button)
 {
-    if (mouseUpdate[button] == updateCounter)
-    {
-        return !IsMouseDown(button);
-    }
-    return false;
+    return mouseState[button] == false && mouseUpdate[button] == updateCounter;
 }
 
 bool InputManager::IsMouseDown(int button)
@@ -147,15 +115,15 @@ bool InputManager::IsMouseDown(int button)
 
 int InputManager::GetMouseX()
 {
-    return mouseX;
+    return this->mouseX;
 }
 
 int InputManager::GetMouseY()
 {
-    return mouseY;
+    return this->mouseY;
 }
 
 bool InputManager::QuitRequested()
 {
-    return quitRequested;
+    return this->quitRequested;
 }

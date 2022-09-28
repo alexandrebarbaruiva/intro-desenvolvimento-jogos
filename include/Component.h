@@ -10,21 +10,14 @@
  */
 #ifndef COMPONENT_HEADER
 #define COMPONENT_HEADER
-#define INCLUDE_SDL_IMAGE
-#define INCLUDE_SDL_MIXER
-#include "SDL_include.h"
 #include "GameObject.h"
 #include <string>
-
-class GameObject;
 
 class Component
 {
 protected:
     GameObject &associated;
 
-private:
-    /* data */
 public:
     Component(GameObject &associated);
 
@@ -32,15 +25,11 @@ public:
 
     std::string type;
 
-    void virtual Start();
-    void virtual Update(float dt) = 0;
-    void virtual Render() = 0;
-    bool virtual Is(std::string type) = 0;
+    virtual void Update(float dt) = 0;
+    virtual void Render() = 0;
+    virtual bool Is(std::string type) = 0;
+    virtual void Start();
+    virtual void NotifyCollision(GameObject &other);
 };
 
 #endif
-
-// Links
-// https://stackoverflow.com/questions/2391679/why-do-we-need-virtual-functions-in-c
-// https://www.geeksforgeeks.org/difference-between-virtual-function-and-pure-virtual-function-in-c/
-// https://en.cppreference.com/w/cpp/language/constructor

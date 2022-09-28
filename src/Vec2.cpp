@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2022
  *
  */
-#include "../include/Vec2.h"
+#include "Vec2.h"
 
 Vec2::Vec2(float x, float y)
 {
@@ -22,87 +22,37 @@ Vec2::Vec2()
     this->y = 0;
 }
 
-Vec2::~Vec2()
+Vec2 Vec2::operator+(const Vec2 &vector) const
 {
+    return Vec2(this->x + vector.x, this->y + vector.y);
 }
 
-Vec2 Vec2::GetRotated(float rotation)
+Vec2 Vec2::operator+=(const Vec2 &vector) const
 {
-    float newX = ((x * cos(rotation)) - (y * sin(rotation)));
-    float newY = ((y * cos(rotation)) - (x * sin(rotation)));
-    return Vec2(newX, newY);
+    return *this + vector;
 }
 
-Vec2 Vec2::operator+(Vec2 const &vector)
+Vec2 Vec2::operator-(const Vec2 &vector) const
 {
-    Vec2 newVector = Vec2(0, 0);
-    newVector.x = this->x + vector.x;
-    newVector.y = this->y + vector.y;
-    return newVector;
+    return Vec2(this->x - vector.x, this->y - vector.y);
 }
 
-Vec2 Vec2::operator-(Vec2 const &vector)
+Vec2 Vec2::operator*(const float vector) const
 {
-    Vec2 newVector = Vec2(0, 0);
-    newVector.x = this->x - vector.x;
-    newVector.y = this->y - vector.y;
-    return newVector;
+    return Vec2(this->x * vector, this->y * vector);
 }
 
-Vec2 Vec2::operator+=(Vec2 const &vector)
+float Vec2::Distance(Vec2 v1, Vec2 v2)
 {
-    *this = *this + vector;
-    return *this;
+    return Mag(v1 - v2);
 }
 
-Vec2 Vec2::operator-=(Vec2 const &vector)
+float Vec2::Atan2()
 {
-    *this = *this - vector;
-    return *this;
-}
-
-Vec2 Vec2::operator*(float value)
-{
-    Vec2 newVector = Vec2(0, 0);
-    newVector.x = this->x * value;
-    newVector.y = this->y * value;
-    return newVector;
-}
-
-Vec2 Vec2::operator/(float value)
-{
-    Vec2 newVector = Vec2(0, 0);
-    if (value != 0.0)
-    {
-        newVector.x = this->x / value;
-        newVector.y = this->y / value;
-    }
-    return newVector;
-}
-
-float Vec2::atan() {
     return atan2(this->y, this->x);
 }
 
-float Vec2::direct(Vec2 &vector) {
-    Vec2 result = (vector - *this);
-    return -atan2(result.y, result.x);
-}
-
-Vec2 Vec2::normalize()
+float Vec2::Atan2(Vec2 v1, Vec2 v2)
 {
-    float mag = this->magnitude();
-    return Vec2(
-        (this->x / mag),
-        (this->y / mag));
-}
-
-float Vec2::magnitude()
-{
-    return sqrt((pow(this->x, 2)) + (pow(this->y, 2)));
-}
-
-float Vec2::distanceTo(Vec2 &vector)
-{
-    return (*this - vector).magnitude();
+    return atan2(v1.y, v1.x) - atan2(v2.y, v2.x);
 }

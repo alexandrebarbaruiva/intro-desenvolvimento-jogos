@@ -10,45 +10,41 @@
  */
 #ifndef STATE_HEADER
 #define STATE_HEADER
-#define INCLUDE_SDL_IMAGE
-#define INCLUDE_SDL_MIXER
-#include "SDL_include.h"
-#include <vector>
-#include <memory>
-#include "Sprite.h"
-#include "Music.h"
-#include "Sound.h"
 #include "GameObject.h"
-#include "Alien.h"
-#include "PenguinBody.h"
-#include "TileSet.h"
-#include "TileMap.h"
-#include "InputManager.h"
-#include "Camera.h"
-#include "CameraFollower.h"
+#include <vector>
+#include <string>
+#include <memory>
 
 class State
 {
-private:
-    Music *music;
+protected:
+    void StartArray();
+    virtual void UpdateArray(float dt);
+    virtual void RenderArray();
+
     bool started;
     bool quitRequested;
+    bool popRequested;
+
     std::vector<std::shared_ptr<GameObject>> objectArray;
 
 public:
     State();
-    ~State();
+    virtual ~State();
 
-    void Start();
-    void Input();
-    std::weak_ptr<GameObject> AddObject(GameObject* go);
-    std::weak_ptr<GameObject> GetObject(GameObject* go);
+    virtual void Start() = 0;
+    virtual void Pause() = 0;
+    virtual void Resume() = 0;
+
+    virtual void LoadAssets() = 0;
+    virtual void Update(float dt) = 0;
+    virtual void Render() = 0;
+
+    virtual std::weak_ptr<GameObject> AddObject(GameObject *object);
+    virtual std::weak_ptr<GameObject> GetObjectPtr(GameObject *object);
+    virtual std::vector<std::weak_ptr<GameObject>> QueryObjectsBy(std::string component);
+
+    bool PopRequested();
     bool QuitRequested();
-    void LoadAssets();
-    void Update(float dt);
-    void Render();
 };
 #endif
-
-// Links
-// https://www.cppstories.com/2014/05/vector-of-objects-vs-vector-of-pointers/

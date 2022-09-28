@@ -11,13 +11,11 @@
 #ifndef GAMEOBJ_HEADER
 #define GAMEOBJ_HEADER
 #define INCLUDE_SDL_IMAGE
-#define INCLUDE_SDL_MIXER
 #include "SDL_include.h"
-#include "Component.h"
 #include "Rect.h"
 #include <vector>
 #include <memory>
-#include <iostream>
+#include <string>
 
 class Component;
 
@@ -25,12 +23,12 @@ class GameObject
 {
 private:
     std::vector<std::unique_ptr<Component>> components;
-    bool started;
     bool isDead;
 
 public:
     Rect box;
     double angleDeg;
+    bool started;
 
     GameObject(/* args */);
     ~GameObject();
@@ -44,11 +42,7 @@ public:
     void AddComponent(Component *cpt);
     void RemoveComponent(Component *cpt);
     Component *GetComponent(std::string type);
+    void NotifyCollision(GameObject &other);
 };
 
 #endif
-
-// Links
-// https://stackoverflow.com/questions/6876751/differences-between-unique-ptr-and-shared-ptr
-// https://stackoverflow.com/questions/2133250/x-does-not-name-a-type-error-in-c
-// https://www.cppstories.com/2014/05/vector-of-objects-vs-vector-of-pointers/

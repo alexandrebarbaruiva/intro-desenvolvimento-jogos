@@ -10,8 +10,7 @@
  */
 #ifndef INPUT_HEADER
 #define INPUT_HEADER
-#define INCLUDE_SDL_IMAGE
-#define INCLUDE_SDL_MIXER
+#define INCLUDE_SDL
 #define W_KEY SDLK_w
 #define A_KEY SDLK_a
 #define S_KEY SDLK_s
@@ -27,7 +26,6 @@
 #define RIGHT_MOUSE_BUTTON SDL_BUTTON_RIGHT
 #include "SDL_include.h"
 #include <unordered_map>
-#include <string>
 
 class InputManager
 {

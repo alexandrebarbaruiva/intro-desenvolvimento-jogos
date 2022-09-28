@@ -11,18 +11,16 @@
 #ifndef SPRITE_HEADER
 #define SPRITE_HEADER
 #define INCLUDE_SDL_IMAGE
-#define INCLUDE_SDL_MIXER
 #include "SDL_include.h"
 #include "Component.h"
-#include "Resources.h"
-#include "Camera.h"
-#include "Vec2.h"
+#include "Timer.h"
 #include <string>
+#include <memory>
 
 class Sprite : public Component
 {
 private:
-    SDL_Texture *texture;
+    std::shared_ptr<SDL_Texture> texture;
     int width;
     int height;
     SDL_Rect clipRect;
@@ -31,23 +29,26 @@ private:
     int frameCount;
     int currentFrame;
     float timeElapsed;
-    int frameTime;
+    float frameTime;
 
+    float secondsToSelfDestruct;
+    Timer selfDestructCount;
 
 public:
-    Sprite(GameObject &associated);
-    Sprite(GameObject &associated, std::string file, int frameCount = 1, float frameTime = 1);
-
+    Sprite(GameObject &associated, int frameCount, float frameTime, float secondsToSelfDestruct = 0);
+    Sprite(GameObject &associated, std::string file, int frameCount = 1, float frameTime = 1, float secondsToSelfDestruct = 0);
     ~Sprite();
+
+    std::string type = "Sprite";
 
     void Open(std::string file);
     void SetClip(int x, int y, int w, int h);
-    void Render(int x, int y, int w, int h);
+    void Render(int x, int y);
     void Render();
 
     void SetFrame(int frame);
     void SetFrameCount(int frameCount);
-    void SetFrameTime(int frameTime);
+    void SetFrameTime(float frameTime);
 
     int GetWidth();
     int GetHeight();
@@ -58,8 +59,7 @@ public:
 
     void Update(float dt);
     bool Is(std::string type);
+    void NotifyCollision(GameObject &other);
 };
-#endif
 
-// Links
-// https://www.geeksforgeeks.org/inheritance-in-c/
+#endif

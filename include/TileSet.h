@@ -10,27 +10,23 @@
  */
 #ifndef TILESET_HEADER
 #define TILESET_HEADER
-#define INCLUDE_SDL_IMAGE
-#define INCLUDE_SDL_MIXER
-#include "SDL_include.h"
+#include "GameObject.h"
 #include "Sprite.h"
-#include <string>
-#include <iostream>
 
 class TileSet
 {
 private:
-    Sprite *tileSet;
+    Sprite tileSet;
     int rows;
     int columns;
     int tileWidth;
     int tileHeight;
 
 public:
-    TileSet(int tileWidth, int tileHeight, std::string file);
-    ~TileSet();
+    TileSet(GameObject &associated, int tileWidth, int tileHeight, std::string file);
 
     void RenderTile(unsigned index, float x, float y);
+
     int GetTileWidth();
     int GetTileHeight();
 };

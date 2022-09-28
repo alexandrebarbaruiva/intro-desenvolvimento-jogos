@@ -10,44 +10,39 @@
  */
 #ifndef ALIEN_HEADER
 #define ALIEN_HEADER
-#define INCLUDE_SDL_IMAGE
-#define INCLUDE_SDL_MIXER
-#include "SDL_include.h"
 #include "Component.h"
 #include "Sprite.h"
-#include "Vec2.h"
 #include "Minion.h"
-#include <vector>
-#include <cmath>
+#include "Collider.h"
+#include "Sound.h"
+#include "Game.h"
+#include "Bullet.h"
+#include "Timer.h"
 #include <queue>
+#include <climits>
 #include <string>
 
 class Alien : public Component
 {
 private:
-    class Action
+    enum AlienState
     {
-    private:
-    public:
-        enum ActionType
-        {
-            MOVE,
-            SHOOT
-        };
-        ActionType type;
-        Vec2 pos;
-
-        Action(ActionType type, float x, float y);
+        MOVING,
+        RESTING
     };
-
     Vec2 speed;
     int hp;
-    int minions;
-    std::queue<Action> taskQueue;
+
+    AlienState state;
+    Vec2 destination;
+
+    Timer restTimer;
+    float timeOffset;
+
     std::vector<std::weak_ptr<GameObject>> minionArray;
 
 public:
-    Alien(GameObject &associated, int nMinions);
+    Alien(GameObject &associated, float timeOffset = 0);
     ~Alien();
 
     std::string type = "Alien";
@@ -55,8 +50,11 @@ public:
     void Start();
     void Update(float dt);
     void Render();
+    std::weak_ptr<GameObject> GetClosestMinion();
     bool Is(std::string type);
-    int GetClosestMinion(Vec2 actionPos);
+    void NotifyCollision(GameObject &other);
+
+    static int alienCount;
 };
 
 #endif

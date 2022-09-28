@@ -10,13 +10,9 @@
  */
 #ifndef CAMERA_FOLLOWER_HEADER
 #define CAMERA_FOLLOWER_HEADER
-#define INCLUDE_SDL_IMAGE
-#define INCLUDE_SDL_MIXER
-#include "SDL_include.h"
-#include "GameObject.h"
-#include "Vec2.h"
 #include "Camera.h"
-#include "Sprite.h"
+#include "GameObject.h"
+#include "Component.h"
 #include <string>
 
 class CameraFollower : public Component
@@ -24,11 +20,14 @@ class CameraFollower : public Component
 private:
     /* data */
 public:
-    CameraFollower(GameObject &go);
+    CameraFollower(GameObject &associated);
+
+    std::string type = "CameraFollower";
 
     void Update(float dt);
     void Render();
     bool Is(std::string type);
+    void NotifyCollision(GameObject &other);
 };
 
 #endif

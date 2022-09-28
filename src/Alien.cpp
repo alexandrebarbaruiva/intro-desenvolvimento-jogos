@@ -8,91 +8,89 @@
  * @copyright Copyright (c) 2022
  *
  */
-#include <iostream>
-#include "../include/Alien.h"
-#include "../include/Game.h"
+#include "Alien.h"
 
-Alien::Action::Action(ActionType type, float x, float y)
+int Alien::alienCount = 0;
+Alien::Alien(GameObject &associated, float timeOffset) : Component(associated)
 {
-    this->type = type;
-    pos = Vec2(x, y);
-}
-
-Alien::Alien(GameObject &associated, int nMinions) : Component(associated)
-{
-    Sprite *sprite = new Sprite(associated, "assets/img/alien.png");
-    associated.AddComponent(sprite);
-    hp = 30;
-    speed = Vec2();
-    minions = nMinions;
+    associated.AddComponent(new Sprite(associated, "assets/img/alien.png", 1, 1.0));
+    associated.AddComponent(new Collider(associated));
+    this->hp = ALIEN_HP;
+    this->speed = {100, 100};
+    this->state = AlienState::RESTING;
+    this->timeOffset = timeOffset;
+    Alien::alienCount++;
 }
 
 Alien::~Alien()
 {
+    minionArray.clear();
+    Alien::alienCount--;
 }
 
 void Alien::Start()
 {
-    for (int i = 0; i < minions; i++)
-    {
-        State *state = &Game::GetInstance()->GetState();
-        std::weak_ptr<GameObject> alienCenter = state->GetObject(&associated);
+    GameObject *minionGO;
+    Minion *minion;
+    int maxMinions = (int)(((float)rand() / RAND_MAX) * (8 - 1) + 1);
+    State *state = &Game::GetInstance().GetCurrentState();
+    std::weak_ptr<GameObject> alienObject = state->GetObjectPtr(&associated);
 
-        GameObject *gameObject = new GameObject();
-        float minionDegree = (M_PI * i * 360 / this->minions) / 180;
-        Minion *minion = new Minion(*gameObject, alienCenter, minionDegree);
-        this->minionArray.push_back(state->AddObject(gameObject));
-        gameObject->AddComponent(minion);
+    for (int i = 0; i < maxMinions; i++)
+    {
+        minionGO = new GameObject();
+        float minionDegree = (PI * i * 2 / maxMinions);
+        minion = new Minion(*minionGO, alienObject, minionDegree);
+        minionGO->AddComponent(minion);
+        minionArray.push_back(state->AddObject(minionGO));
     }
 }
 
 void Alien::Update(float dt)
 {
-    if (this->hp <= 0)
+    associated.angleDeg -= (180 / 124);
+
+    if (state == AlienState::RESTING)
     {
-        associated.RequestDelete();
-    }
-    InputManager instance = InputManager::GetInstance();
-    bool clickToShoot = instance.MousePress(LEFT_MOUSE_BUTTON);
-    bool clickToMove = instance.MousePress(RIGHT_MOUSE_BUTTON);
-    int clickPosX = instance.GetMouseX() + Camera::pos.x;
-    int clickPosY = instance.GetMouseY() + Camera::pos.y;
-    if (clickToMove)
-    {
-        taskQueue.push(Action(Action::ActionType::MOVE, clickPosX, clickPosY));
-    }
-    if (clickToShoot)
-    {
-        taskQueue.push(Action(Action::ActionType::SHOOT, clickPosX, clickPosY));
-    }
-    associated.angleDeg += M_PI * dt * 6;
-    // Reset speed
-    speed = Vec2();
-    if (taskQueue.size() > 0)
-    {
-        Action currentAction = taskQueue.front();
-        if (currentAction.type == Action::ActionType::MOVE)
+        if (restTimer.Get() >= 0.5f)
         {
-            Vec2 destination = currentAction.pos - (associated.box.measures() / 2);
-            Vec2 currentPos = associated.box.toVec2();
-
-            speed = (destination - currentPos).normalize();
-            associated.box.setPosition(associated.box.toVec2() + (speed * dt * 300));
-
-            bool tooClose = (std::abs((destination - currentPos).magnitude()) < 10);
-            if (tooClose)
-            {
-                associated.box.setPosition(destination);
-                taskQueue.pop();
-            }
+            destination = Camera::pos + Vec2(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT / 2);
+            Vec2 direction = destination - associated.box.Center();
+            speed = Vec2::Rotate(speed, Vec2::Atan2(direction, speed));
+            state = AlienState::MOVING;
         }
-        if (currentAction.type == Action::ActionType::SHOOT)
+        restTimer.Update(dt + timeOffset);
+    }
+    else if (Vec2::Distance(associated.box.Center(), destination) < 10)
+    {
+        destination = Camera::pos + Vec2(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT / 2);
+        std::weak_ptr<GameObject> closestMinion = Alien::GetClosestMinion();
+
+        ((Minion *)(closestMinion.lock()->GetComponent("Minion")))->Shoot(destination);
+
+        state = AlienState::RESTING;
+        restTimer.Restart();
+    }
+    associated.box = associated.box + speed * dt;
+}
+
+void Alien::NotifyCollision(GameObject &other)
+{
+    Bullet *bullet = (Bullet *)other.GetComponent("Bullet");
+    if (bullet != nullptr && !bullet->targetsPlayer)
+    {
+        this->hp -= bullet->GetDamage();
+        if (this->hp <= 0)
         {
-            int closestMinion = Alien::GetClosestMinion(currentAction.pos);
-            std::shared_ptr<GameObject> objectPointer = minionArray[closestMinion].lock();
-            Minion *minionObject = (Minion *)objectPointer->GetComponent("Minion");
-            minionObject->Shoot(currentAction.pos);
-            taskQueue.pop();
+            associated.RequestDelete();
+
+            GameObject *alienDeath = new GameObject();
+            alienDeath->AddComponent(new Sprite(*alienDeath, "assets/img/aliendeath.png", 4, 0.1, 0.4));
+            Sound *sound = new Sound(*alienDeath, "assets/audio/boom.wav");
+            sound->Play();
+            alienDeath->AddComponent(sound);
+            alienDeath->box.SetCenter(associated.box.Center());
+            Game::GetInstance().GetCurrentState().AddObject(alienDeath);
         }
     }
 }
@@ -106,18 +104,18 @@ bool Alien::Is(std::string type)
     return (type == Alien::type);
 }
 
-int Alien::GetClosestMinion(Vec2 actionPos)
+std::weak_ptr<GameObject> Alien::GetClosestMinion()
 {
-    int closestMinion = 0;
-    float minDistance = MAXFLOAT;
-    for (int mini = 0; mini < (int)minionArray.size(); mini++)
+    int closestDistance = INT_MAX;
+
+    std::weak_ptr<GameObject> closestMinion;
+    for (auto minion : minionArray)
     {
-        std::shared_ptr<GameObject> minionObject = minionArray[mini].lock();
-        float minionDistance = minionObject->box.toVec2().distanceTo(actionPos);
-        if (minionDistance < minDistance)
+        float distance = Vec2::Distance(minion.lock()->box.Center(), this->destination);
+        if (distance < closestDistance)
         {
-            closestMinion = mini;
-            minDistance = minionDistance;
+            closestMinion = minion;
+            closestDistance = distance;
         }
     }
     return closestMinion;

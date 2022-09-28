@@ -11,13 +11,9 @@
 #ifndef MINION_HEADER
 #define MINION_HEADER
 #include "Component.h"
-#include "GameObject.h"
 #include "Sprite.h"
-#include "Vec2.h"
-#include "Bullet.h"
-#include <vector>
-#include <queue>
-#include <string>
+
+#define ARC PI / 64
 
 class Minion : public Component
 {
@@ -27,15 +23,14 @@ private:
 
 public:
     Minion(GameObject &associated, std::weak_ptr<GameObject> alienCenter, float arcOffsetDeg = 0);
-    ~Minion();
 
     std::string type = "Minion";
 
-    void Start();
     void Update(float dt);
     void Render();
     bool Is(std::string type);
     void Shoot(Vec2 target);
+    void NotifyCollision(GameObject &other);
 };
 
 #endif
